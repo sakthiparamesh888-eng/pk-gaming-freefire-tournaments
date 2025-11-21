@@ -128,3 +128,8 @@
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(255, 140, 71, 0.6);
 }
+.contact-item h3,
+.contact-item p,
+.contact-item a {
+  color: #e5e7eb !important;
+}
