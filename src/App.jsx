@@ -4,13 +4,12 @@ import { Routes, Route, Outlet } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-import BottomNav from "./components/BottomNav.jsx";   // <-- ADDED
+import BottomNav from "./components/BottomNav.jsx";
 
-// Lazy-loaded pages
-const HomePage = React.lazy(() => import("./pages/HomePage.jsx"));
+// Lazy-loaded pages (FIXED)
+const HomePage = React.lazy(() => import("./pages/Homepage.jsx"));
 const TournamentsPage = React.lazy(() => import("./pages/TournamentsPage.jsx"));
 const BookingPage = React.lazy(() => import("./pages/BookingPage.jsx"));
-
 const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage.jsx"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage.jsx"));
@@ -19,12 +18,10 @@ function AppLayout() {
   return (
     <>
       <Navbar />
-
       <main className="main-content">
         <Outlet />
       </main>
-
-      <BottomNav />   {/* <-- MOBILE BOTTOM NAVIGATION */}
+      <BottomNav />
       <Footer />
     </>
   );
