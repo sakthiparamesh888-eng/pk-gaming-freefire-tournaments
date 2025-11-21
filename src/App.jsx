@@ -7,7 +7,7 @@ import Footer from "./components/Footer.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 
 // Lazy-loaded pages (FIXED)
-const HomePage = React.lazy(() => import("./pages/Homepage.jsx"));
+const HomePage = React.lazy(() => import("./pages/HomePage.jsx"));
 const TournamentsPage = React.lazy(() => import("./pages/TournamentsPage.jsx"));
 const BookingPage = React.lazy(() => import("./pages/BookingPage.jsx"));
 const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
