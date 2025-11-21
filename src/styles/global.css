@@ -1630,3 +1630,20 @@ button,
 .nav-link.active::after {
   display: none !important;
 }
+.t-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+  padding-top: 10px;
+}
+@media (max-width: 380px) {
+  .t-grid {
+    grid-template-columns: 1fr; /* one card full width */
+  }
+
+  .t-card {
+    max-width: 100%;
+    padding: 18px 16px;
+  }
+}
