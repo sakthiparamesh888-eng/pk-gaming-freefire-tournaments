@@ -71,7 +71,7 @@ export default function ContactPage() {
 
           {/* YOUTUBE */}
           <a
-            href="https://youtube.com"
+            href="https://youtube.com/@pkgamingliv?si=epT6dcHngOyqX3dx"
             target="_blank"
             className="contact-item"
           >
