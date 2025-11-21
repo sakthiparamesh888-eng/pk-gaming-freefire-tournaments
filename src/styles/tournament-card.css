@@ -15,7 +15,7 @@
 .t-card {
   background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.03),
+      rgb(255, 255, 255),
       rgba(15, 23, 42, 0.92)
     );
   border-radius: 24px;
@@ -180,4 +180,62 @@
   .t-card {
     padding: 20px;
   }
+}
+/* INNER BACKGROUND IMAGE */
+.t-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;              /* Medium opacity */
+  filter: blur(6px);           /* Smooth glass blur */
+  z-index: 1;
+  border-radius: 24px;
+}
+
+/* CONTENT ABOVE IMAGE */
+.t-card-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Add a strong glass effect */
+.t-card {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+/* 🔥 Inner background image layer */
+.t-inner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;              /* medium opacity */
+  filter: blur(3px);           /* glassy effect */
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* make sure the content stays above */
+.t-card > * {
+  position: relative;
+  z-index: 2;
+}
+/* Inner background image */
+.t-inner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  filter: blur(4px);
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Content sits above the blur */
+.t-card-content {
+  position: relative;
+  z-index: 2;
 }

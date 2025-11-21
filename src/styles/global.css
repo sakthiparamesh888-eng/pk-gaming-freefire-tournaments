@@ -1647,3 +1647,138 @@ button,
     padding: 18px 16px;
   }
 }
+@media (max-width: 480px) {
+  .t-grid {
+    grid-template-columns: 1fr;
+  }
+  .t-card {
+    padding: 20px;
+  }
+}
+/* INNER BACKGROUND IMAGE */
+.t-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;              /* Medium opacity */
+  filter: blur(6px);           /* Smooth glass blur */
+  z-index: 1;
+  border-radius: 24px;
+}
+
+/* CONTENT ABOVE IMAGE */
+.t-card-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Add a strong glass effect */
+.t-card {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+/* 🔥 Inner background image layer */
+.t-inner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;              /* medium opacity */
+  filter: blur(3px);           /* glassy effect */
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* make sure the content stays above */
+.t-card > * {
+  position: relative;
+  z-index: 2;
+}
+/* Inner background image */
+.t-inner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5;
+  filter: blur(4px);
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Content sits above the blur */
+.t-card-content {
+  position: relative;
+  z-index: 2;
+}
+.t-label {
+  color: rgb(255, 255, 255);   /* light white */
+}
+
+.t-value {
+  color: rgba(255, 255, 255, 0.9);    /* brighter white for values */
+}
+/* ================================
+   MOBILE SPACING FIX (≤ 480px)
+   ================================ */
+@media (max-width: 480px) {
+
+  /* Global inner content spacing */
+  .bg-content,
+  .bg-inner,
+  .main-content {
+    padding: 16px 14px !important;
+  }
+
+  /* Hero section spacing */
+  .hero-section,
+  .hero-main,
+  .glass-card {
+    padding: 16px 14px !important;
+    margin-bottom: 18px !important;
+    border-radius: 20px;
+  }
+
+  /* Tournament card */
+  .t-card {
+    padding: 16px 14px !important;
+    margin: 0 auto 18px !important;
+    border-radius: 20px;
+  }
+
+  .t-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  /* Hero slider spacing */
+  .hero-body {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  /* Text spacing */
+  h1, h2, h3 {
+    margin-bottom: 8px !important;
+  }
+
+  p {
+    margin-bottom: 10px !important;
+  }
+
+  /* Navbar spacing */
+  .nav-shell {
+    top: 10px !important;
+    padding: 10px 16px !important;
+    width: calc(100% - 20px) !important;
+  }
+
+  /* Mobile menu spacing */
+  .mobile-menu {
+    padding: 18px 14px !important;
+    gap: 10px !important;
+  }
+}

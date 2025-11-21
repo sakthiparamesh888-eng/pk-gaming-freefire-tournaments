@@ -79,7 +79,8 @@ export default function TournamentsPage() {
           </p>
         )}
         {filtered.map((t) => (
-          <TournamentCard key={t.id} tournament={t} />
+          <TournamentCard key={t.id} tournament={t} image={t.image} />
+
         ))}
       </div>
     </div>

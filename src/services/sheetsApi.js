@@ -17,7 +17,6 @@ export async function fetchTournaments() {
 
   return rows
     .filter((row) => {
-      // your header is "available" with values Yes / No
       const avRaw =
         row.available ??
         row.Available ??
@@ -27,17 +26,14 @@ export async function fetchTournaments() {
 
       const av = String(avRaw).toLowerCase().trim();
 
-      // treat yes / true / 1 / open as AVAILABLE
       return av === "yes" || av === "true" || av === "1" || av === "open";
     })
     .map((row, idx) => {
-      // mode mapping: your sheet has "Squad", "Solo", etc.
       const modeRaw = row.mode ?? row.Mode ?? "";
-      let mode = "BR"; // default to BR
+      let mode = "BR";
 
       if (typeof modeRaw === "string") {
         const m = modeRaw.toLowerCase();
-        // if you later add "CS" / "Clash Squad", we map that to CS
         if (m === "cs" || m === "clash squad") {
           mode = "CS";
         } else {
@@ -45,7 +41,6 @@ export async function fetchTournaments() {
         }
       }
 
-      // entryFee: convert "₹50" or "Free" into a number
       const feeRaw = row.entryFee ?? row.EntryFee ?? 0;
       const feeClean = String(feeRaw).toLowerCase().trim();
       let entryFee = 0;
@@ -55,8 +50,8 @@ export async function fetchTournaments() {
 
       return {
         id: row.id ?? row.ID ?? idx + 1,
-        mode, // "BR" or "CS"
-        subMode: row.subMode ?? row.SubMode ?? "", // e.g. "1v1" for CS
+        mode,
+        subMode: row.subMode ?? row.SubMode ?? "",
         title: row.title ?? row.Title ?? "PK Esports Room",
         entryFee,
         maxPlayers: Number(
@@ -68,7 +63,10 @@ export async function fetchTournaments() {
         closeTime: row.closeTime ?? row.CloseTime ?? null,
         status: row.status ?? row.Status ?? "Open",
         category: row.category ?? row.Category ?? null,
-        // keep original value so we can inspect later if needed
+
+        /* ✅ NEW: Load image column from Google Sheet */
+        image: row.image ?? row.Image ?? row.img ?? row.Img ?? null,
+
         available:
           row.available ??
           row.Available ??

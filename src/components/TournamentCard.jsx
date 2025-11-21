@@ -1,6 +1,7 @@
 // src/components/TournamentCard.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/tournament-card.css";
 
 function formatDateTime(value) {
   if (!value) return "-";
@@ -14,12 +15,7 @@ function formatDateTime(value) {
   });
 
   const year = d.getFullYear();
-
-  // If Google Sheets stored only TIME, the date is usually 1899/1900.
-  // In that case, show only time so 1899 never appears.
-  if (year < 1970) {
-    return timePart;
-  }
+  if (year < 1970) return timePart;
 
   const datePart = d.toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -46,6 +42,7 @@ export default function TournamentCard({ tournament }) {
     closeTime,
     status,
     category,
+    image, // <-- COMING FROM SHEETS
   } = tournament;
 
   const filledPct =
@@ -70,74 +67,86 @@ export default function TournamentCard({ tournament }) {
 
   return (
     <div className="glass-card t-card">
-      <div className="t-header">
-        <div>
-          <p className="t-id">ID: #{id}</p>
-          <h3>{title}</h3>
-        </div>
-        <div className="t-header-right">
-          {category && <span className="t-category-chip">{category}</span>}
-          <span className={statusClass}>
-            {isLive ? "LIVE" : isClosed ? "Closed" : "Upcoming"}
-          </span>
-        </div>
-      </div>
 
-      <p className="t-mode">
-        {mode === "CS" ? "Clash Squad" : "Battle Royale"}
-        {subMode ? ` • ${subMode}` : ""}
-      </p>
+      {/* 🔥 Inner blurred background image */}
+      {image && (
+        <div
+          className="t-inner-bg"
+          style={{ backgroundImage: `url(${image})` }}
+        />
+      )}
 
-      <div className="t-details">
-        <div>
-          <span className="t-label">Entry</span>
-          <span className="t-value">{entryFee ? `₹${entryFee}` : "Free"}</span>
+      {/* CONTENT */}
+      <div className="t-card-content">
+        <div className="t-header">
+          <div>
+            <p className="t-id">ID: #{id}</p>
+            <h3>{title}</h3>
+          </div>
+          <div className="t-header-right">
+            {category && <span className="t-category-chip">{category}</span>}
+            <span className={statusClass}>
+              {isLive ? "LIVE" : isClosed ? "Closed" : "Upcoming"}
+            </span>
+          </div>
         </div>
-        <div>
-          <span className="t-label">Slots</span>
-          <span className="t-value">
-            {currentPlayers}/{maxPlayers}
-          </span>
-        </div>
-        <div>
-          <span className="t-label">Min Level</span>
-          <span className="t-value">{minLevel}+</span>
-        </div>
-      </div>
 
-      <div className="t-progress">
-        <div className="t-progress-bar">
-          <div
-            className="t-progress-fill"
-            style={{ width: `${Math.min(filledPct, 100)}%` }}
-          />
-        </div>
-        <p className="t-progress-text">
-          {filledPct}% filled
-          {filledPct >= 70 && filledPct < 100 && (
-            <span className="t-fast"> • Filling fast</span>
-          )}
+        <p className="t-mode">
+          {mode === "CS" ? "Clash Squad" : "Battle Royale"}
+          {subMode ? ` • ${subMode}` : ""}
         </p>
-      </div>
 
-      <div className="t-times">
-        <div>
-          <span className="t-label">Starts</span>
-          <span className="t-value">{formatDateTime(startTime)}</span>
+        <div className="t-details">
+          <div>
+            <span className="t-label">Entry</span>
+            <span className="t-value">{entryFee ? `₹${entryFee}` : "Free"}</span>
+          </div>
+          <div>
+            <span className="t-label">Slots</span>
+            <span className="t-value">
+              {currentPlayers}/{maxPlayers}
+            </span>
+          </div>
+          <div>
+            <span className="t-label">Min Level</span>
+            <span className="t-value">{minLevel}+</span>
+          </div>
         </div>
-        <div>
-          <span className="t-label">Slot closes</span>
-          <span className="t-value">{formatDateTime(closeTime)}</span>
-        </div>
-      </div>
 
-      <button
-        className="btn-primary btn-full"
-        onClick={handleBook}
-        disabled={isClosed}
-      >
-        {isClosed ? "Registration Closed" : "Book Slot"}
-      </button>
+        <div className="t-progress">
+          <div className="t-progress-bar">
+            <div
+              className="t-progress-fill"
+              style={{ width: `${Math.min(filledPct, 100)}%` }}
+            />
+          </div>
+          <p className="t-progress-text">
+            {filledPct}% filled
+            {filledPct >= 70 && filledPct < 100 && (
+              <span className="t-fast"> • Filling fast</span>
+            )}
+          </p>
+        </div>
+
+        <div className="t-times">
+          <div>
+            <span className="t-label">Starts</span>
+            <span className="t-value">{formatDateTime(startTime)}</span>
+          </div>
+          <div>
+            <span className="t-label">Slot closes</span>
+            <span className="t-value">{formatDateTime(closeTime)}</span>
+          </div>
+        </div>
+
+        <button
+          className="btn-primary btn-full"
+          onClick={handleBook}
+          disabled={isClosed}
+        >
+          {isClosed ? "Registration Closed" : "Book Slot"}
+        </button>
+      </div>
     </div>
   );
 }

@@ -58,7 +58,7 @@ export default function ContactPage() {
 
           {/* FACEBOOK */}
           <a
-            href="https://facebook.com"
+            href="https://www.facebook.com/share/19fybSGUXv/?mibextid=wwXIfr"
             target="_blank"
             className="contact-item"
           >
