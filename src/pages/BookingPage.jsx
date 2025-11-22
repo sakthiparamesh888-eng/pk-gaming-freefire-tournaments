@@ -48,27 +48,36 @@ export default function BookingPage() {
   }
 
   function handlePayClick() {
-    if (!form.levelConfirmed) {
-      alert("You must confirm that your Free Fire level is 40+.");
-      return;
-    }
-    if (!form.ffUid || !form.ffName || !form.realName || !form.phone) {
-      alert("Please fill all fields before paying.");
-      return;
-    }
-
-    setIsPayClicked(true);
-
-    const amount = tournament.entryFee || 0;
-    const note = encodeURIComponent(
-      `PK Esports ${tournament.title} (${tournament.id})`
-    );
-    const upiUrl = `upi://pay?pa=${encodeURIComponent(
-      GPayUPI
-    )}&pn=${encodeURIComponent("PK Esports")}&am=${amount}&cu=INR&tn=${note}`;
-
-    window.location.href = upiUrl;
+  if (!form.levelConfirmed) {
+    alert("You must confirm that your Free Fire level is 40+.");
+    return;
   }
+  if (!form.ffUid || !form.ffName || !form.realName || !form.phone) {
+    alert("Please fill all fields before paying.");
+    return;
+  }
+
+  setIsPayClicked(true);
+
+  const amount = tournament.entryFee || 0;
+  const note = encodeURIComponent(
+    `PK Esports ${tournament.title} (${tournament.id})`
+  );
+  const upiUrl = `upi://pay?pa=${encodeURIComponent(
+    GPayUPI
+  )}&pn=${encodeURIComponent("PK Esports")}&am=${amount}&cu=INR&tn=${note}`;
+
+  // OPEN GPay
+  window.location.href = upiUrl;
+
+  // AFTER OPENING GPay → MOVE TO PENDING PAGE
+  setTimeout(() => {
+    navigate("/pending-payment", {
+      state: { tournament, form },
+    });
+  }, 500);
+}
+
 
   async function handleConfirm() {
     if (saving) return;

@@ -13,6 +13,14 @@ const BookingPage = React.lazy(() => import("./pages/BookingPage.jsx"));
 const LoginPage = React.lazy(() => import("./pages/LoginPage.jsx"));
 const AboutPage = React.lazy(() => import("./pages/AboutPage.jsx"));
 const ContactPage = React.lazy(() => import("./pages/ContactPage.jsx"));
+const AccessCheckPage = React.lazy(() => import("./pages/AccessCheckPage.jsx"));
+const RoomDetailsPage = React.lazy(() =>
+  import("./pages/RoomDetailsPage.jsx")
+);
+
+const PaymentPendingPage = React.lazy(() =>
+  import("./pages/PaymentPendingPage.jsx")
+);
 
 function AppLayout() {
   return (
@@ -38,6 +46,12 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/pending-payment" element={<PaymentPendingPage />} />
+          <Route path="/verify-access" element={<AccessCheckPage />} />
+          <Route path="/room-details" element={<RoomDetailsPage />} />
+
+
+
         </Route>
       </Routes>
     </Suspense>

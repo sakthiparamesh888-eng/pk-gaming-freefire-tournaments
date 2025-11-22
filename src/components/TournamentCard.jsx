@@ -64,6 +64,10 @@ export default function TournamentCard({ tournament }) {
     if (isClosed) return;
     navigate("/booking", { state: { tournament } });
   }
+  function handleRoomAccess() {
+  navigate("/verify-access", { state: { matchId: id } });
+}
+
 
   return (
     <div className="glass-card t-card">
@@ -146,6 +150,13 @@ export default function TournamentCard({ tournament }) {
         >
           {isClosed ? "Registration Closed" : "Book Slot"}
         </button>
+        <button
+  className="btn-secondary btn-full"
+  onClick={handleRoomAccess}
+>
+  Room Access
+</button>
+
       </div>
     </div>
   );
