@@ -1,5 +1,5 @@
 // src/pages/BookingPage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createBooking, getLocalUser } from "../services/sheetsApi.js";
 import "../styles/booking.css";
@@ -14,6 +14,17 @@ export default function BookingPage() {
   const tournament = location.state?.tournament;
 
   const savedUser = getLocalUser();
+
+  // ✅ FIX: redirect only inside useEffect (NO white screen)
+  useEffect(() => {
+    if (!savedUser) {
+      navigate("/login", {
+        state: { redirectTo: "/booking", tournament },
+      });
+    }
+  }, [savedUser, navigate, tournament]);
+
+  if (!savedUser) return null;
 
   const [form, setForm] = useState({
     ffUid: savedUser?.ffUid || "",
@@ -38,18 +49,16 @@ export default function BookingPage() {
     );
   }
 
-  // 🔥 Handle Change with FF UID + PHONE validation
+  // 🔥 VALIDATION: UID + PHONE
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
 
-    // FF UID — ONLY numbers, min length 8
     if (name === "ffUid") {
       const cleaned = value.replace(/\D/g, "");
       setForm((prev) => ({ ...prev, ffUid: cleaned }));
       return;
     }
 
-    // 🔥 Phone — ONLY numbers, max 10 digits
     if (name === "phone") {
       const cleaned = value.replace(/\D/g, "").slice(0, 10);
       setForm((prev) => ({ ...prev, phone: cleaned }));
@@ -67,28 +76,23 @@ export default function BookingPage() {
       alert("You must confirm that your Free Fire level is 40+.");
       return;
     }
-
     if (!form.ffUid || form.ffUid.length < 8) {
-      alert("Free Fire UID must be at least 8 digits and numbers only.");
+      alert("Free Fire UID must be at least 8 digits.");
       return;
     }
-
     if (!form.phone || form.phone.length !== 10) {
-      alert("Phone number must be exactly 10 digits.");
+      alert("Phone must be exactly 10 digits.");
       return;
     }
-
     if (!form.ffName || !form.realName) {
-      alert("Please fill all fields before paying.");
+      alert("Please fill all details.");
       return;
     }
 
     setIsPayClicked(true);
 
     const amount = tournament.entryFee || 0;
-    const note = encodeURIComponent(
-      `PK Esports ${tournament.title} (${tournament.id})`
-    );
+    const note = encodeURIComponent(`PK Esports ${tournament.title} (${tournament.id})`);
 
     const upiUrl = `upi://pay?pa=${encodeURIComponent(
       GPayUPI
@@ -103,7 +107,6 @@ export default function BookingPage() {
 
   async function handleConfirm() {
     if (saving) return;
-
     if (!isPayClicked) {
       alert("Please click Pay via GPay first.");
       return;
@@ -113,9 +116,8 @@ export default function BookingPage() {
       alert("Free Fire UID must be at least 8 digits.");
       return;
     }
-
     if (!form.phone || form.phone.length !== 10) {
-      alert("Phone number must be exactly 10 digits.");
+      alert("Phone must be exactly 10 digits.");
       return;
     }
 
@@ -136,13 +138,11 @@ export default function BookingPage() {
       createdAt: new Date().toISOString(),
     };
 
-    const textLines = [
+    const waMsg = [
       "*PK Esports – Tournament Booking*",
       "",
       `Tournament: ${tournament.title} (${tournament.id})`,
-      `Mode: ${tournament.mode === "BR" ? "BR" : "CS"}${
-        tournament.subMode ? ` • ${tournament.subMode}` : ""
-      }`,
+      `Mode: ${tournament.mode}${tournament.subMode ? " • " + tournament.subMode : ""}`,
       `Entry: ₹${tournament.entryFee}`,
       "",
       `FF UID: ${form.ffUid}`,
@@ -151,11 +151,11 @@ export default function BookingPage() {
       `Phone: ${form.phone}`,
       "",
       "Level: 40+ (confirmed)",
-    ];
+    ].join("\n");
 
-    const msg = encodeURIComponent(textLines.join("\n"));
-    const phoneDigits = WHATSAPP_NUM.replace(/[^\d]/g, "");
-    const waUrl = `https://wa.me/${phoneDigits}?text=${msg}`;
+    const waUrl = `https://wa.me/${WHATSAPP_NUM.replace(/[^\d]/g, "")}?text=${encodeURIComponent(
+      waMsg
+    )}`;
 
     try {
       const result = await createBooking(booking);
@@ -166,7 +166,6 @@ export default function BookingPage() {
         return;
       }
 
-      // Insert PlayerAccess row
       await fetch(PLAYER_ACCESS_URL, {
         method: "POST",
         mode: "no-cors",
@@ -179,13 +178,12 @@ export default function BookingPage() {
       });
 
       setMessage("Booking saved. Opening WhatsApp…");
-
     } catch (err) {
       console.error(err);
-      setMessage("Could not save booking to sheet. Opening WhatsApp anyway.");
+      setMessage("Could not save booking, opening WhatsApp anyway.");
     }
 
-    if (waUrl) window.open(waUrl, "_blank");
+    window.open(waUrl, "_blank");
 
     setIsPayClicked(false);
     setSaving(false);
@@ -204,101 +202,47 @@ export default function BookingPage() {
   return (
     <div className="page page-booking glass-card">
       <h1>Booking – {tournament.title}</h1>
-      <p className="page-subtitle">
-        Fill your Free Fire details, pay via GPay, and then confirm via WhatsApp.
-      </p>
 
       <div className="booking-details">
-        <p>
-          <strong>Mode:</strong>{" "}
-          {tournament.mode === "BR" ? "Battle Royale" : "Clash Squad"}{" "}
-          {tournament.subMode ? `• ${tournament.subMode}` : ""}
-        </p>
-        <p>
-          <strong>Entry Fee:</strong> ₹{tournament.entryFee}
-        </p>
-        <p>
-          <strong>Slots:</strong> {tournament.currentPlayers}/{tournament.maxPlayers}
-        </p>
-        <p>
-          <strong>Level Rule:</strong> Only Free Fire accounts level 40+ allowed.
-        </p>
+        <p><strong>Mode:</strong> {tournament.mode}{tournament.subMode ? " • " + tournament.subMode : ""}</p>
+        <p><strong>Entry Fee:</strong> ₹{tournament.entryFee}</p>
+        <p><strong>Slots:</strong> {tournament.currentPlayers}/{tournament.maxPlayers}</p>
+        <p><strong>Level Rule:</strong> Level 40+ only.</p>
 
-        {savedUser ? (
-          <p className="info-text">Using details from your PK Esports account.</p>
-        ) : (
-          <p className="info-text">
-            Tip: Signup once to auto-fill your details next time.
-          </p>
-        )}
+        <p className="info-text">Using details from your PK Esports account.</p>
       </div>
 
       <form className="booking-form" onSubmit={(e) => e.preventDefault()}>
         <label>
           Free Fire UID
-          <input
-            type="text"
-            name="ffUid"
-            value={form.ffUid}
-            onChange={handleChange}
-            placeholder="Enter your FF UID"
-          />
+          <input type="text" name="ffUid" value={form.ffUid} onChange={handleChange} />
         </label>
 
         <label>
           Free Fire Name
-          <input
-            type="text"
-            name="ffName"
-            value={form.ffName}
-            onChange={handleChange}
-            placeholder="Your in-game name"
-          />
+          <input type="text" name="ffName" value={form.ffName} onChange={handleChange} />
         </label>
 
         <label>
           Original Name
-          <input
-            type="text"
-            name="realName"
-            value={form.realName}
-            onChange={handleChange}
-            placeholder="Your real name"
-          />
+          <input type="text" name="realName" value={form.realName} onChange={handleChange} />
         </label>
 
         <label>
           Phone Number (WhatsApp)
-          <input
-            type="tel"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            placeholder="10-digit WhatsApp number"
-          />
+          <input type="tel" name="phone" value={form.phone} onChange={handleChange} />
         </label>
 
         <label className="checkbox-row">
-          <input
-            type="checkbox"
-            name="levelConfirmed"
-            checked={form.levelConfirmed}
-            onChange={handleChange}
-          />
-          <span>I confirm my Free Fire account level is 40 or above.</span>
+          <input type="checkbox" name="levelConfirmed" checked={form.levelConfirmed} onChange={handleChange} />
+          <span>I confirm my Free Fire level is 40+.</span>
         </label>
 
         <div className="booking-actions">
           <button type="button" className="btn-secondary" onClick={handlePayClick}>
             Pay via GPay (UPI)
           </button>
-
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={handleConfirm}
-            disabled={saving || !isPayClicked}
-          >
+          <button type="button" className="btn-primary" onClick={handleConfirm} disabled={saving || !isPayClicked}>
             Confirm & Send on WhatsApp
           </button>
         </div>

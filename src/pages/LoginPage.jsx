@@ -1,5 +1,7 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import '../styles/login.css'
 import {
   registerUser,
@@ -9,6 +11,9 @@ import {
 } from "../services/sheetsApi.js";
 
 export default function LoginPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(() => getLocalUser());
   const [form, setForm] = useState({
     gamerName: "",
@@ -16,15 +21,16 @@ export default function LoginPage() {
     ffName: "",
     phone: "",
   });
+
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
   function handleChange(e) {
     const { name, value } = e.target;
 
-    // 🔥 UID VALIDATION — NUMBERS ONLY + MIN 8
+    // FF UID — numbers only
     if (name === "ffUid") {
-      const cleaned = value.replace(/\D/g, ""); // remove all non-digits
+      const cleaned = value.replace(/\D/g, "");
       setForm((prev) => ({ ...prev, ffUid: cleaned }));
       return;
     }
@@ -35,13 +41,11 @@ export default function LoginPage() {
   async function handleSignup(e) {
     e.preventDefault();
 
-    // ▶ REQUIRED FIELD CHECK
     if (!form.gamerName || !form.ffUid || !form.ffName || !form.phone) {
       alert("Please fill all fields.");
       return;
     }
 
-    // ▶ 🔥 FF UID MUST BE >= 8 digits
     if (form.ffUid.length < 8) {
       alert("Free Fire UID must be at least 8 digits and numbers only.");
       return;
@@ -64,8 +68,16 @@ export default function LoginPage() {
         ...payload,
         id: res.id ?? undefined,
       };
+
       saveLocalUser(storedUser);
       setUser(storedUser);
+
+      // 🔥 redirect back to booking if redirected earlier
+      if (location.state?.redirectTo === "/booking") {
+        navigate("/booking", { state: { tournament: location.state.tournament } });
+        return;
+      }
+
       setMessage("Signup successful. You are now logged in on this device.");
     } catch (err) {
       console.error(err);
@@ -87,7 +99,7 @@ export default function LoginPage() {
     setMessage("You have logged out on this device.");
   }
 
-  // Already logged in UI
+  // ✔ Already logged in
   if (user) {
     return (
       <div className="page glass-card">
@@ -113,7 +125,7 @@ export default function LoginPage() {
     );
   }
 
-  // Signup form UI
+  // ✔ Signup UI
   return (
     <div className="page glass-card">
       <h1>Signup</h1>
