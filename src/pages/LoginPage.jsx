@@ -21,13 +21,29 @@ export default function LoginPage() {
 
   function handleChange(e) {
     const { name, value } = e.target;
+
+    // 🔥 UID VALIDATION — NUMBERS ONLY + MIN 8
+    if (name === "ffUid") {
+      const cleaned = value.replace(/\D/g, ""); // remove all non-digits
+      setForm((prev) => ({ ...prev, ffUid: cleaned }));
+      return;
+    }
+
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
   async function handleSignup(e) {
     e.preventDefault();
+
+    // ▶ REQUIRED FIELD CHECK
     if (!form.gamerName || !form.ffUid || !form.ffName || !form.phone) {
       alert("Please fill all fields.");
+      return;
+    }
+
+    // ▶ 🔥 FF UID MUST BE >= 8 digits
+    if (form.ffUid.length < 8) {
+      alert("Free Fire UID must be at least 8 digits and numbers only.");
       return;
     }
 
@@ -44,7 +60,6 @@ export default function LoginPage() {
 
     try {
       const res = await registerUser(payload);
-      // if your Apps Script returns an id, keep it
       const storedUser = {
         ...payload,
         id: res.id ?? undefined,
@@ -72,7 +87,7 @@ export default function LoginPage() {
     setMessage("You have logged out on this device.");
   }
 
-  // ▶ CASE 1: already signed up & logged in → show account (no need login every time)
+  // Already logged in UI
   if (user) {
     return (
       <div className="page glass-card">
@@ -83,34 +98,22 @@ export default function LoginPage() {
         </p>
 
         <div className="booking-details">
-          <p>
-            <strong>Gamer Name:</strong> {user.gamerName}
-          </p>
-          <p>
-            <strong>FF UID:</strong> {user.ffUid}
-          </p>
-          <p>
-            <strong>FF Name:</strong> {user.ffName}
-          </p>
-          <p>
-            <strong>Phone:</strong> {user.phone}
-          </p>
+          <p><strong>Gamer Name:</strong> {user.gamerName}</p>
+          <p><strong>FF UID:</strong> {user.ffUid}</p>
+          <p><strong>FF Name:</strong> {user.ffName}</p>
+          <p><strong>Phone:</strong> {user.phone}</p>
         </div>
 
         <button className="btn-secondary" onClick={handleLogout}>
           Logout on this device
         </button>
 
-        {message && (
-          <p className="info-text" style={{ marginTop: 8 }}>
-            {message}
-          </p>
-        )}
+        {message && <p className="info-text" style={{ marginTop: 8 }}>{message}</p>}
       </div>
     );
   }
 
-  // ▶ CASE 2: not signed up yet → show signup form
+  // Signup form UI
   return (
     <div className="page glass-card">
       <h1>Signup</h1>
@@ -138,7 +141,7 @@ export default function LoginPage() {
             name="ffUid"
             value={form.ffUid}
             onChange={handleChange}
-            placeholder="Your Free Fire UID"
+            placeholder="Enter your Free Fire UID"
           />
         </label>
 
