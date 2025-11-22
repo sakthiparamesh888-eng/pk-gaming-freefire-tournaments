@@ -68,7 +68,7 @@ export default function RoomDetailsPage() {
   return (
     <div
       className="page room-page room-details-page glass-card"
-      style={{ padding: 25, maxWidth: 420 }}
+      style={{ padding: 25, maxWidth: 420 ,marginTop:60 }}
     >
       <h2>Match Room Details</h2>
 

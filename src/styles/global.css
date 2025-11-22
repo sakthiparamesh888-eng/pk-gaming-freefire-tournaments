@@ -1807,7 +1807,7 @@ button,
   backdrop-filter: blur(18px);
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  margin: 20px;
+  
 }
 
 /* Glowing borders ONLY inside room pages */
@@ -1825,6 +1825,7 @@ button,
   opacity: 0.35;
   z-index: -1;
   pointer-events: none;
+  
 }
 
 /* Inputs glow ONLY here */
@@ -1863,6 +1864,7 @@ button,
 .room-page .btn-secondary:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 22px rgba(255, 255, 255, 0.3);
+  
 }
 
 /* Boxes glow on hover */
@@ -1875,6 +1877,7 @@ button,
   padding: 16px;
   transition: 0.25s;
   position: relative;
+  margin: 20px;
 }
 
 .room-page .room-box:hover,
@@ -1929,4 +1932,137 @@ button,
 .room-page {
   width: 100%;
   max-width: 430px;
+}
+/* FIX HEADER BADGE ALIGNMENT */
+.t-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;                /* space between Scrim + LIVE */
+  min-width: fit-content;
+}
+
+.t-category-chip,
+.t-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 12px;
+  white-space: nowrap;     /* prevent text breaking */
+}
+
+/* Make sure LIVE stays bright and visible */
+.t-status-live {
+  background: #ff244a;
+  color: #fff;
+}
+
+/* For upcoming or closed add subtle background */
+.t-status-upcoming {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.t-status-closed {
+  background: rgba(255, 255, 255, 0.15);
+  color: #aaa;
+}
+
+/* Responsive fix for small screens */
+@media (max-width: 430px) {
+  .t-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .t-header-right {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .t-header h3 {
+    font-size: 20px;
+    line-height: 22px;
+  }
+}
+/* Medium-white text for card details */
+.t-details .t-label,
+.t-details .t-value,
+.t-times .t-label,
+.t-times .t-value,
+.t-progress-text,
+.t-mode,
+.t-id {
+  color: rgba(255, 255, 255, 0.75) !important;  /* medium-white */
+}
+
+/* Even lighter for labels only */
+.t-details .t-label,
+.t-times .t-label {
+  color: rgba(255, 255, 255, 0.966) !important;  /* softer white for labels */
+}
+
+/* Tournament subtitle fix */
+.t-mode {
+  font-weight: 500;
+}
+
+/* Progress % text medium white */
+.t-progress-text {
+  font-size: 13px;
+  color: rgba(255, 248, 248, 0.7) !important;
+}
+/* Brighter white for details */
+.t-details .t-label,
+.t-details .t-value,
+.t-times .t-label,
+.t-times .t-value,
+.t-progress-text,
+.t-mode,
+.t-id {
+  color: rgba(255, 255, 255, 0.88) !important;  /* brighter white */
+}
+
+/* Labels slightly softer but still bright */
+.t-details .t-label,
+.t-times .t-label {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Subtitle text */
+.t-mode {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Progress text */
+.t-progress-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.84) !important;
+}
+/* --- Center only room pages --- */
+.room-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* The glass card wrapper */
+.room-details-page,
+.room-access-page,
+.payment-pending-page {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;      /* centers horizontally */
+}
+
+/* Center the blocks inside */
+.room-details-page .room-box,
+.room-details-page .prize-box {
+  width: 100%;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+
 }

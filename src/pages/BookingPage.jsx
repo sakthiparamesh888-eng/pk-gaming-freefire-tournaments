@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createBooking, getLocalUser } from "../services/sheetsApi.js";
-import '../styles/booking.css'
+import "../styles/booking.css";
+
 const WHATSAPP_NUM = import.meta.env.VITE_WHATSAPP_NUMBER;
 const GPayUPI = import.meta.env.VITE_GPAY_UPI_ID;
+const PLAYER_ACCESS_URL = import.meta.env.VITE_SHEETS_PLAYER_ACCESS_URL;
 
 export default function BookingPage() {
   const location = useLocation();
@@ -29,10 +31,7 @@ export default function BookingPage() {
     return (
       <div className="page page-booking">
         <p className="error-text">No tournament selected.</p>
-        <button
-          className="btn-primary"
-          onClick={() => navigate("/tournaments")}
-        >
+        <button className="btn-primary" onClick={() => navigate("/tournaments")}>
           Go to Tournaments
         </button>
       </div>
@@ -48,36 +47,33 @@ export default function BookingPage() {
   }
 
   function handlePayClick() {
-  if (!form.levelConfirmed) {
-    alert("You must confirm that your Free Fire level is 40+.");
-    return;
+    if (!form.levelConfirmed) {
+      alert("You must confirm that your Free Fire level is 40+.");
+      return;
+    }
+
+    if (!form.ffUid || !form.ffName || !form.realName || !form.phone) {
+      alert("Please fill all fields before paying.");
+      return;
+    }
+
+    setIsPayClicked(true);
+
+    const amount = tournament.entryFee || 0;
+    const note = encodeURIComponent(
+      `PK Esports ${tournament.title} (${tournament.id})`
+    );
+
+    const upiUrl = `upi://pay?pa=${encodeURIComponent(
+      GPayUPI
+    )}&pn=${encodeURIComponent("PK Esports")}&am=${amount}&cu=INR&tn=${note}`;
+
+    window.location.href = upiUrl;
+
+    setTimeout(() => {
+      navigate("/pending-payment", { state: { tournament, form } });
+    }, 500);
   }
-  if (!form.ffUid || !form.ffName || !form.realName || !form.phone) {
-    alert("Please fill all fields before paying.");
-    return;
-  }
-
-  setIsPayClicked(true);
-
-  const amount = tournament.entryFee || 0;
-  const note = encodeURIComponent(
-    `PK Esports ${tournament.title} (${tournament.id})`
-  );
-  const upiUrl = `upi://pay?pa=${encodeURIComponent(
-    GPayUPI
-  )}&pn=${encodeURIComponent("PK Esports")}&am=${amount}&cu=INR&tn=${note}`;
-
-  // OPEN GPay
-  window.location.href = upiUrl;
-
-  // AFTER OPENING GPay → MOVE TO PENDING PAGE
-  setTimeout(() => {
-    navigate("/pending-payment", {
-      state: { tournament, form },
-    });
-  }, 500);
-}
-
 
   async function handleConfirm() {
     if (saving) return;
@@ -93,7 +89,7 @@ export default function BookingPage() {
     const booking = {
       tournamentId: tournament.id,
       tournamentTitle: tournament.title,
-      mode: tournament.mode, // "BR" or "CS"
+      mode: tournament.mode,
       subMode: tournament.subMode || "",
       entryFee: tournament.entryFee,
       ffUid: form.ffUid,
@@ -104,7 +100,7 @@ export default function BookingPage() {
       createdAt: new Date().toISOString(),
     };
 
-    // Build WhatsApp message
+    // WhatsApp message
     const textLines = [
       "*PK Esports – Tournament Booking*",
       "",
@@ -121,35 +117,44 @@ export default function BookingPage() {
       "",
       "Level: 40+ (confirmed)",
     ];
+
     const msg = encodeURIComponent(textLines.join("\n"));
-
-    const rawNum = typeof WHATSAPP_NUM === "string" ? WHATSAPP_NUM : "";
-    const phoneDigits = rawNum.replace(/[^\d]/g, "");
-    let waUrl = "";
-
-    if (!phoneDigits) {
-      console.error("WHATSAPP_NUM is not configured correctly:", WHATSAPP_NUM);
-      alert("WhatsApp number is not configured. Please contact admin.");
-    } else {
-      waUrl = `https://wa.me/${phoneDigits}?text=${msg}`;
-    }
+    const phoneDigits = WHATSAPP_NUM.replace(/[^\d]/g, "");
+    const waUrl = `https://wa.me/${phoneDigits}?text=${msg}`;
 
     try {
-      await createBooking(booking);
+      const result = await createBooking(booking);
+
+      if (result?.success === false && result?.reason === "duplicate") {
+        alert("⚠ You have already booked this tournament.");
+        setSaving(false);
+        return;
+      }
+
+      // 🔥 AUTO INSERT INTO PlayerAccess
+      await fetch(PLAYER_ACCESS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          phone: form.phone,
+          match_id: tournament.id,
+          paid: "NO",
+        }),
+      });
+
       setMessage("Booking saved to spreadsheet. Opening WhatsApp…");
+
     } catch (err) {
       console.error(err);
       setMessage("Could not save booking to sheet. Opening WhatsApp anyway.");
     }
 
-    // Always try to open WhatsApp if URL is ready
-    if (waUrl) {
-      window.open(waUrl, "_blank");
-    }
+    if (waUrl) window.open(waUrl, "_blank");
 
-    // Reset state
     setIsPayClicked(false);
     setSaving(false);
+
     setForm({
       ffUid: savedUser?.ffUid || "",
       ffName: savedUser?.ffName || "",
@@ -158,7 +163,6 @@ export default function BookingPage() {
       levelConfirmed: false,
     });
 
-    // Redirect back to tournaments
     navigate("/tournaments");
   }
 
@@ -166,8 +170,7 @@ export default function BookingPage() {
     <div className="page page-booking glass-card">
       <h1>Booking – {tournament.title}</h1>
       <p className="page-subtitle">
-        Fill your Free Fire details, pay via GPay, and then confirm via
-        WhatsApp.
+        Fill your Free Fire details, pay via GPay, and then confirm via WhatsApp.
       </p>
 
       <div className="booking-details">
@@ -180,21 +183,17 @@ export default function BookingPage() {
           <strong>Entry Fee:</strong> ₹{tournament.entryFee}
         </p>
         <p>
-          <strong>Slots:</strong> {tournament.currentPlayers}/
-          {tournament.maxPlayers}
+          <strong>Slots:</strong> {tournament.currentPlayers}/{tournament.maxPlayers}
         </p>
         <p>
-          <strong>Level Rule:</strong> Only Free Fire accounts level 40+
-          allowed.
+          <strong>Level Rule:</strong> Only Free Fire accounts level 40+ allowed.
         </p>
+
         {savedUser ? (
-          <p className="info-text">
-            Using details from your PK Esports account. You can edit if needed.
-          </p>
+          <p className="info-text">Using details from your PK Esports account.</p>
         ) : (
           <p className="info-text">
-            Tip: Signup once in Login/Signup page to auto-fill your details next
-            time.
+            Tip: Signup once to auto-fill your details next time.
           </p>
         )}
       </div>
@@ -255,11 +254,7 @@ export default function BookingPage() {
         </label>
 
         <div className="booking-actions">
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={handlePayClick}
-          >
+          <button type="button" className="btn-secondary" onClick={handlePayClick}>
             Pay via GPay (UPI)
           </button>
 

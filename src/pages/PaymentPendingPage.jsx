@@ -89,8 +89,16 @@ export default function PaymentPendingPage() {
     }
 
     try {
-      await createBooking(booking);
-      setMessage("Booking saved. Opening WhatsApp…");
+      const result = await createBooking(booking);
+
+if (result.success === false && result.reason === "duplicate") {
+  alert("You already booked this tournament. Payment verification pending.");
+  setSaving(false);
+  return;
+}
+
+setMessage("Booking saved. Opening WhatsApp…");
+
     } catch (err) {
       console.error(err);
       setMessage("Could not save booking to sheet. Opening WhatsApp anyway.");
