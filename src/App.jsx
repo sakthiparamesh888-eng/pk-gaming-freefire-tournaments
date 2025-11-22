@@ -22,6 +22,9 @@ const RoomDetailsPage = React.lazy(() =>
 const PaymentPendingPage = React.lazy(() =>
   import("./pages/PaymentPendingPage.jsx")
 );
+const BookingSummaryPage = React.lazy(() =>
+  import("./pages/BookingSummaryPage.jsx")
+);
 
 function AppLayout() {
   return (
@@ -50,6 +53,8 @@ export default function App() {
           <Route path="/pending-payment" element={<PaymentPendingPage />} />
           <Route path="/verify-access" element={<AccessCheckPage />} />
           <Route path="/room-details" element={<RoomDetailsPage />} />
+          <Route path="/my-bookings" element={<BookingSummaryPage />} />
+
 
 
 

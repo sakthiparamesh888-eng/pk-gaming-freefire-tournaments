@@ -1,3 +1,4 @@
+// src/components/Navbar.jsx
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../styles/navbar.css";
@@ -40,6 +41,12 @@ export default function Navbar() {
         {user && (
           <NavLink to="/login" className="nav-link gamer-icon">
             🎮
+          </NavLink>
+        )}
+
+        {user && (
+          <NavLink to="/my-bookings" className={setActive}>
+            My Bookings
           </NavLink>
         )}
 
