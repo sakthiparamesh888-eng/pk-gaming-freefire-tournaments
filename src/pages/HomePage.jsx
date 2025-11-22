@@ -123,8 +123,7 @@ export default function HomePage() {
             <div className="home-chip">
               <h3>Device & Account Rules</h3>
               <p>
-                Mobile-Only Tournaments Emulator players strictly not allowed
-                unless tournament mentions "Open". Only Level 40+ accounts
+                Only 1 PC Player Per Team Allowed . Only Level 40+ accounts
                 permitted to avoid smurfing & unfair advantages. Switching
                 devices, sharing accounts, or using guest accounts is not
                 allowed. Players must join using the same UID submitted during

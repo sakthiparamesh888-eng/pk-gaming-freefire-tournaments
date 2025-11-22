@@ -38,14 +38,21 @@ export default function BookingPage() {
     );
   }
 
-  // 🔥 Handle Change with FF UID validation
+  // 🔥 Handle Change with FF UID + PHONE validation
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
 
     // FF UID — ONLY numbers, min length 8
     if (name === "ffUid") {
-      const cleaned = value.replace(/\D/g, ""); // remove non-numbers
+      const cleaned = value.replace(/\D/g, "");
       setForm((prev) => ({ ...prev, ffUid: cleaned }));
+      return;
+    }
+
+    // 🔥 Phone — ONLY numbers, max 10 digits
+    if (name === "phone") {
+      const cleaned = value.replace(/\D/g, "").slice(0, 10);
+      setForm((prev) => ({ ...prev, phone: cleaned }));
       return;
     }
 
@@ -66,7 +73,12 @@ export default function BookingPage() {
       return;
     }
 
-    if (!form.ffName || !form.realName || !form.phone) {
+    if (!form.phone || form.phone.length !== 10) {
+      alert("Phone number must be exactly 10 digits.");
+      return;
+    }
+
+    if (!form.ffName || !form.realName) {
       alert("Please fill all fields before paying.");
       return;
     }
@@ -102,6 +114,11 @@ export default function BookingPage() {
       return;
     }
 
+    if (!form.phone || form.phone.length !== 10) {
+      alert("Phone number must be exactly 10 digits.");
+      return;
+    }
+
     setSaving(true);
     setMessage("");
 
@@ -119,7 +136,6 @@ export default function BookingPage() {
       createdAt: new Date().toISOString(),
     };
 
-    // WhatsApp message
     const textLines = [
       "*PK Esports – Tournament Booking*",
       "",
@@ -150,7 +166,7 @@ export default function BookingPage() {
         return;
       }
 
-      // AUTO INSERT PlayerAccess row
+      // Insert PlayerAccess row
       await fetch(PLAYER_ACCESS_URL, {
         method: "POST",
         mode: "no-cors",
@@ -174,7 +190,6 @@ export default function BookingPage() {
     setIsPayClicked(false);
     setSaving(false);
 
-    // Auto-fill from saved user
     setForm({
       ffUid: savedUser?.ffUid || "",
       ffName: savedUser?.ffName || "",
