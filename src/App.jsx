@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { Suspense } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
+import BackgroundVideo from "./components/BackgroundVideo.jsx";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -24,14 +25,14 @@ const PaymentPendingPage = React.lazy(() =>
 
 function AppLayout() {
   return (
-    <>
+    <BackgroundVideo>
       <Navbar />
       <main className="main-content">
         <Outlet />
       </main>
       <BottomNav />
       <Footer />
-    </>
+    </BackgroundVideo>
   );
 }
 

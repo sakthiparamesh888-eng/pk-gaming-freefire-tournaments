@@ -43,7 +43,7 @@ export default function HomePage() {
       description: "Device check, strict rules, no cheating tolerated.",
       ctaText: "View Rules",
       ctaLink: "/about",
-      meta: { entry: 0, prize: 0, size: 48 },
+      meta: { entry: 30, prize: 500, size: 48 },
     },
   ];
 

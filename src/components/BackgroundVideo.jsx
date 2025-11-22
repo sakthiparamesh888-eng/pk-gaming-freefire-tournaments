@@ -13,7 +13,7 @@ export default function BackgroundVideo({ children }) {
       {/* OVERLAY */}
       <div className="bg-overlay"></div>
 
-      {/* MAIN CONTENT (all pages + navbar) */}
+      {/* MAIN CONTENT */}
       <div className="bg-content">{children}</div>
     </div>
   );
