@@ -38,8 +38,17 @@ export default function BookingPage() {
     );
   }
 
+  // 🔥 Handle Change with FF UID validation
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
+
+    // FF UID — ONLY numbers, min length 8
+    if (name === "ffUid") {
+      const cleaned = value.replace(/\D/g, ""); // remove non-numbers
+      setForm((prev) => ({ ...prev, ffUid: cleaned }));
+      return;
+    }
+
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -52,7 +61,12 @@ export default function BookingPage() {
       return;
     }
 
-    if (!form.ffUid || !form.ffName || !form.realName || !form.phone) {
+    if (!form.ffUid || form.ffUid.length < 8) {
+      alert("Free Fire UID must be at least 8 digits and numbers only.");
+      return;
+    }
+
+    if (!form.ffName || !form.realName || !form.phone) {
       alert("Please fill all fields before paying.");
       return;
     }
@@ -80,6 +94,11 @@ export default function BookingPage() {
 
     if (!isPayClicked) {
       alert("Please click Pay via GPay first.");
+      return;
+    }
+
+    if (form.ffUid.length < 8) {
+      alert("Free Fire UID must be at least 8 digits.");
       return;
     }
 
@@ -131,7 +150,7 @@ export default function BookingPage() {
         return;
       }
 
-      // 🔥 AUTO INSERT INTO PlayerAccess
+      // AUTO INSERT PlayerAccess row
       await fetch(PLAYER_ACCESS_URL, {
         method: "POST",
         mode: "no-cors",
@@ -143,7 +162,7 @@ export default function BookingPage() {
         }),
       });
 
-      setMessage("Booking saved to spreadsheet. Opening WhatsApp…");
+      setMessage("Booking saved. Opening WhatsApp…");
 
     } catch (err) {
       console.error(err);
@@ -155,6 +174,7 @@ export default function BookingPage() {
     setIsPayClicked(false);
     setSaving(false);
 
+    // Auto-fill from saved user
     setForm({
       ffUid: savedUser?.ffUid || "",
       ffName: savedUser?.ffName || "",
