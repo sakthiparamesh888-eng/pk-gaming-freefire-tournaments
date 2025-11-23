@@ -5,7 +5,6 @@ import { createBooking, getLocalUser } from "../services/sheetsApi.js";
 import "../styles/booking.css";
 
 const WHATSAPP_NUM = import.meta.env.VITE_WHATSAPP_NUMBER;
-const GPayUPI = import.meta.env.VITE_GPAY_UPI_ID;
 const PLAYER_ACCESS_URL = import.meta.env.VITE_SHEETS_PLAYER_ACCESS_URL;
 
 export default function BookingPage() {
@@ -15,7 +14,6 @@ export default function BookingPage() {
 
   const savedUser = getLocalUser();
 
-  // ✅ FIX: redirect only inside useEffect (NO white screen)
   useEffect(() => {
     if (!savedUser) {
       navigate("/login", {
@@ -34,7 +32,7 @@ export default function BookingPage() {
     levelConfirmed: false,
   });
 
-  const [isPayClicked, setIsPayClicked] = useState(false);
+  const [paymentDone, setPaymentDone] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -49,7 +47,6 @@ export default function BookingPage() {
     );
   }
 
-  // 🔥 VALIDATION: UID + PHONE
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
 
@@ -71,44 +68,16 @@ export default function BookingPage() {
     }));
   }
 
-  function handlePayClick() {
-    if (!form.levelConfirmed) {
-      alert("You must confirm that your Free Fire level is 40+.");
-      return;
-    }
-    if (!form.ffUid || form.ffUid.length < 8) {
-      alert("Free Fire UID must be at least 8 digits.");
-      return;
-    }
-    if (!form.phone || form.phone.length !== 10) {
-      alert("Phone must be exactly 10 digits.");
-      return;
-    }
-    if (!form.ffName || !form.realName) {
-      alert("Please fill all details.");
-      return;
-    }
-
-    setIsPayClicked(true);
-
-    const amount = tournament.entryFee || 0;
-    const note = encodeURIComponent(`PK Esports ${tournament.title} (${tournament.id})`);
-
-    const upiUrl = `upi://pay?pa=${encodeURIComponent(
-      GPayUPI
-    )}&pn=${encodeURIComponent("PK Esports")}&am=${amount}&cu=INR&tn=${note}`;
-
-    window.location.href = upiUrl;
-
-    setTimeout(() => {
-      navigate("/pending-payment", { state: { tournament, form } });
-    }, 500);
-  }
-
   async function handleConfirm() {
     if (saving) return;
-    if (!isPayClicked) {
-      alert("Please click Pay via GPay first.");
+
+    if (!form.levelConfirmed) {
+      alert("Please confirm that your Free Fire level is 40+.");
+      return;
+    }
+
+    if (!paymentDone) {
+      alert("Please confirm that you have completed the payment.");
       return;
     }
 
@@ -135,6 +104,7 @@ export default function BookingPage() {
       realName: form.realName,
       phone: form.phone,
       levelConfirmed: !!form.levelConfirmed,
+      paidConfirmed: !!paymentDone,
       createdAt: new Date().toISOString(),
     };
 
@@ -151,6 +121,7 @@ export default function BookingPage() {
       `Phone: ${form.phone}`,
       "",
       "Level: 40+ (confirmed)",
+      "Payment: Done (user confirmed)",
     ].join("\n");
 
     const waUrl = `https://wa.me/${WHATSAPP_NUM.replace(/[^\d]/g, "")}?text=${encodeURIComponent(
@@ -173,7 +144,7 @@ export default function BookingPage() {
         body: JSON.stringify({
           phone: form.phone,
           match_id: tournament.id,
-          paid: "NO",
+          paid: "YES",
         }),
       });
 
@@ -185,8 +156,8 @@ export default function BookingPage() {
 
     window.open(waUrl, "_blank");
 
-    setIsPayClicked(false);
     setSaving(false);
+    setPaymentDone(false);
 
     setForm({
       ffUid: savedUser?.ffUid || "",
@@ -233,16 +204,37 @@ export default function BookingPage() {
           <input type="tel" name="phone" value={form.phone} onChange={handleChange} />
         </label>
 
+        {/* LEVEL CONFIRM */}
         <label className="checkbox-row">
           <input type="checkbox" name="levelConfirmed" checked={form.levelConfirmed} onChange={handleChange} />
           <span>I confirm my Free Fire level is 40+.</span>
         </label>
 
+        {/* QR PAYMENT UI */}
+        <div className="qr-box">
+          <h3>Scan & Pay</h3>
+          <img src="/qr-code.png" alt="Payment QR Code" className="qr-image" />
+         
+        </div>
+
+        {/* PAYMENT CONFIRM */}
+        <label className="checkbox-row">
+          <input
+            type="checkbox"
+            checked={paymentDone}
+            onChange={(e) => setPaymentDone(e.target.checked)}
+          />
+          <span>I have completed the payment.</span>
+        </label>
+
+        {/* CONFIRM BUTTON */}
         <div className="booking-actions">
-          <button type="button" className="btn-secondary" onClick={handlePayClick}>
-            Pay via GPay (UPI)
-          </button>
-          <button type="button" className="btn-primary" onClick={handleConfirm} disabled={saving || !isPayClicked}>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleConfirm}
+            disabled={saving || !paymentDone}
+          >
             Confirm & Send on WhatsApp
           </button>
         </div>

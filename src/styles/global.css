@@ -2066,3 +2066,29 @@ button,
   margin-right: auto;
 
 }
+.qr-box {
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  text-align: center;
+  animation: fadein 0.4s ease-in-out;
+}
+
+.qr-image {
+  width: 180px;
+  height: 180px;
+  border-radius: 12px;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px #ff8800; }
+  to { box-shadow: 0 0 20px #ffaa33; }
+}
+
+.upi-id {
+  margin-top: 10px;
+  color: #fff;
+  font-weight: bold;
+}
