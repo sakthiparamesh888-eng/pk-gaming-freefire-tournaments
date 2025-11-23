@@ -35,6 +35,7 @@ export default function BookingPage() {
   const [paymentDone, setPaymentDone] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [loadingWA, setLoadingWA] = useState(false); // NEW SPINNER STATE
 
   if (!tournament) {
     return (
@@ -66,6 +67,23 @@ export default function BookingPage() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+  }
+
+  // ⭐ UNIVERSAL WHATSAPP REDIRECT (FAST + FALLBACK)
+  function openWhatsAppFast(text) {
+    setLoadingWA(true); // Show spinner instantly
+    const encoded = encodeURIComponent(text);
+
+    const wa1 = `whatsapp://send?text=${encoded}`;
+    const wa2 = `https://wa.me/?text=${encoded}`;
+
+    // Fastest redirect
+    window.location.href = wa1;
+
+    // Fallback in case app URL fails
+    setTimeout(() => {
+      window.location.href = wa2;
+    }, 400);
   }
 
   async function handleConfirm() {
@@ -124,10 +142,6 @@ export default function BookingPage() {
       "Payment: Done (user confirmed)",
     ].join("\n");
 
-    const waUrl = `https://wa.me/${WHATSAPP_NUM.replace(/[^\d]/g, "")}?text=${encodeURIComponent(
-      waMsg
-    )}`;
-
     try {
       const result = await createBooking(booking);
 
@@ -154,7 +168,8 @@ export default function BookingPage() {
       setMessage("Could not save booking, opening WhatsApp anyway.");
     }
 
-    window.open(waUrl, "_blank");
+    // ⭐ SUPER FAST REDIRECTION
+    openWhatsAppFast(waMsg);
 
     setSaving(false);
     setPaymentDone(false);
@@ -172,6 +187,14 @@ export default function BookingPage() {
 
   return (
     <div className="page page-booking glass-card">
+      {/* LOADING SPINNER OVERLAY */}
+      {loadingWA && (
+        <div className="wa-spinner-overlay">
+          <div className="wa-spinner"></div>
+          <p>Opening WhatsApp…</p>
+        </div>
+      )}
+
       <h1>Booking – {tournament.title}</h1>
 
       <div className="booking-details">
@@ -214,7 +237,6 @@ export default function BookingPage() {
         <div className="qr-box">
           <h3>Scan & Pay</h3>
           <img src="/qr-code.png" alt="Payment QR Code" className="qr-image" />
-         
         </div>
 
         {/* PAYMENT CONFIRM */}
