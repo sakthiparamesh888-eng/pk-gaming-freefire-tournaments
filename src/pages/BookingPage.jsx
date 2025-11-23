@@ -35,7 +35,7 @@ export default function BookingPage() {
   const [paymentDone, setPaymentDone] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
-  const [loadingWA, setLoadingWA] = useState(false); // NEW SPINNER STATE
+  const [loadingWA, setLoadingWA] = useState(false);
 
   if (!tournament) {
     return (
@@ -69,21 +69,26 @@ export default function BookingPage() {
     }));
   }
 
-  // ⭐ UNIVERSAL WHATSAPP REDIRECT (FAST + FALLBACK)
+  // ⭐ CORRECT WHATSAPP REDIRECT (VERY FAST + CROSS PLATFORM)
   function openWhatsAppFast(text) {
-    setLoadingWA(true); // Show spinner instantly
+    setLoadingWA(true);
+
     const encoded = encodeURIComponent(text);
 
-    const wa1 = `whatsapp://send?text=${encoded}`;
-    const wa2 = `https://wa.me/?text=${encoded}`;
+    // Clean and normalize number (auto add +91 for 10-digit numbers)
+    const raw = String(WHATSAPP_NUM || "").replace(/[^\d]/g, "");
+    const fullNumber = raw.length === 10 ? `91${raw}` : raw;
 
-    // Fastest redirect
-    window.location.href = wa1;
+    const waWeb = `https://wa.me/${fullNumber}?text=${encoded}`;
+    const waApp = `whatsapp://send?phone=${fullNumber}&text=${encoded}`;
 
-    // Fallback in case app URL fails
+    // Try app first (instant on Android/iOS)
+    window.location.href = waApp;
+
+    // Fallback for iOS Safari / Desktop
     setTimeout(() => {
-      window.location.href = wa2;
-    }, 400);
+      window.location.href = waWeb;
+    }, 350);
   }
 
   async function handleConfirm() {
@@ -168,26 +173,27 @@ export default function BookingPage() {
       setMessage("Could not save booking, opening WhatsApp anyway.");
     }
 
-    // ⭐ SUPER FAST REDIRECTION
+    // ⭐ FAST REDIRECTION
     openWhatsAppFast(waMsg);
 
-    setSaving(false);
-    setPaymentDone(false);
-
-    setForm({
-      ffUid: savedUser?.ffUid || "",
-      ffName: savedUser?.ffName || "",
-      realName: savedUser?.gamerName || "",
-      phone: savedUser?.phone || "",
-      levelConfirmed: false,
-    });
-
-    navigate("/tournaments");
+    // Safely reset + navigate AFTER WA opens
+    setTimeout(() => {
+      setSaving(false);
+      setPaymentDone(false);
+      setForm({
+        ffUid: savedUser?.ffUid || "",
+        ffName: savedUser?.ffName || "",
+        realName: savedUser?.gamerName || "",
+        phone: savedUser?.phone || "",
+        levelConfirmed: false,
+      });
+      navigate("/tournaments");
+    }, 1000);
   }
 
   return (
     <div className="page page-booking glass-card">
-      {/* LOADING SPINNER OVERLAY */}
+
       {loadingWA && (
         <div className="wa-spinner-overlay">
           <div className="wa-spinner"></div>
@@ -227,19 +233,16 @@ export default function BookingPage() {
           <input type="tel" name="phone" value={form.phone} onChange={handleChange} />
         </label>
 
-        {/* LEVEL CONFIRM */}
         <label className="checkbox-row">
           <input type="checkbox" name="levelConfirmed" checked={form.levelConfirmed} onChange={handleChange} />
           <span>I confirm my Free Fire level is 40+.</span>
         </label>
 
-        {/* QR PAYMENT UI */}
         <div className="qr-box">
           <h3>Scan & Pay</h3>
           <img src="/qr-code.png" alt="Payment QR Code" className="qr-image" />
         </div>
 
-        {/* PAYMENT CONFIRM */}
         <label className="checkbox-row">
           <input
             type="checkbox"
@@ -249,7 +252,6 @@ export default function BookingPage() {
           <span>I have completed the payment.</span>
         </label>
 
-        {/* CONFIRM BUTTON */}
         <div className="booking-actions">
           <button
             type="button"
