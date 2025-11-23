@@ -1,0 +1,21 @@
+type User @table {
+  email: String
+  displayName: String
+  createdAt: Timestamp!
+}
+
+type Service @table {
+  user: User
+  name: String!
+  secretKey: String!
+  issuer: String
+  category: Category
+  createdAt: Timestamp!
+}
+
+type Category @table {
+  user: User
+  name: String!
+  description: String
+  createdAt: Timestamp!
+}

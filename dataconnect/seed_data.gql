@@ -1,0 +1,52 @@
+mutation CreateSeedData @transaction @auth(level: NO_ACCESS) {
+  user_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      displayName: "demouser1",
+      email: "demouser1@example.com",
+      createdAt: "2024-04-26T12:00:00Z"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      displayName: "demouser2",
+      email: "demouser2@example.com",
+      createdAt: "2024-04-26T13:00:00Z"
+    }
+  ])
+  category_insertMany(data: [
+    {
+      id: "650e8400-e29b-41d4-a716-446655440000",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      name: "Demo Category 1",
+      description: "Description for demo category 1",
+      createdAt: "2024-04-26T14:00:00Z"
+    },
+    {
+      id: "650e8400-e29b-41d4-a716-446655440001",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      name: "Demo Category 2",
+      description: "Description for demo category 2",
+      createdAt: "2024-04-26T15:00:00Z"
+    }
+  ])
+  service_insertMany(data: [
+    {
+      id: "750e8400-e29b-41d4-a716-446655440000",
+      categoryId: "650e8400-e29b-41d4-a716-446655440000",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      name: "Demo Service 1",
+      secretKey: "secret1",
+      issuer: "issuer1",
+      createdAt: "2024-04-26T16:00:00Z"
+    },
+    {
+      id: "750e8400-e29b-41d4-a716-446655440001",
+      categoryId: "650e8400-e29b-41d4-a716-446655440001",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      name: "Demo Service 2",
+      secretKey: "secret2",
+      issuer: "issuer2",
+      createdAt: "2024-04-26T17:00:00Z"
+    }
+  ])
+}
