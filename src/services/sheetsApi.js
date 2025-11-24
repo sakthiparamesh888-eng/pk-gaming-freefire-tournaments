@@ -3,17 +3,29 @@
 const TOURNAMENTS_URL = import.meta.env.VITE_SHEETS_TOURNAMENTS_URL; // SHEET 2
 const BOOKINGS_URL = import.meta.env.VITE_SHEETS_BOOKINGS_URL;       // SHEET 3
 const USERS_URL = import.meta.env.VITE_SHEETS_USERS_URL;             // SHEET 1
+const PLAYER_ACCESS_URL = import.meta.env.VITE_SHEETS_PLAYERACCESS_URL; // SHEET 4
 
 const LOCAL_USER_KEY = "pk_esports_user";
 
 /* ============================================================
-   SHEET 2 → TOURNAMENTS
+   ⭐ SHEET 2 → TOURNAMENTS  (UPDATED)
 ============================================================ */
 export async function fetchTournaments() {
   const res = await fetch(TOURNAMENTS_URL, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to load tournaments from sheet");
 
   const rows = await res.json();
+
+  /* ⭐ NEW → Fetch PlayerAccess sheet */
+  let playerAccess = [];
+  if (PLAYER_ACCESS_URL) {
+    try {
+      const res2 = await fetch(PLAYER_ACCESS_URL, { cache: "no-store" });
+      if (res2.ok) playerAccess = await res2.json();
+    } catch (err) {
+      console.warn("PlayerAccess fetch failed:", err);
+    }
+  }
 
   return rows
     .filter((row) => {
@@ -38,6 +50,7 @@ export async function fetchTournaments() {
         if (m === "cs" || m === "clash squad") mode = "CS";
       }
 
+      // ENTRY FEE
       const feeRaw = row.entryFee ?? row.EntryFee ?? 0;
       const feeClean = String(feeRaw).toLowerCase().trim();
       let entryFee = 0;
@@ -45,21 +58,51 @@ export async function fetchTournaments() {
         entryFee = parseInt(feeClean.replace(/[^\d]/g, ""), 10) || 0;
       }
 
+      const basePlayers =
+        Number(row.currentPlayers ?? row.CurrentPlayers ?? 0);
+
+      /* ⭐ FINAL FIX:
+
+         Your PlayerAccess sheet columns are:
+         - phone
+         - match_id
+         - paid
+
+         So we match:
+         - p.match_id === tournament.id
+         - p.paid === "yes"
+      */
+      const verifiedPlayers = playerAccess.filter(
+        (p) =>
+          String(p.match_id).trim() ===
+            String(row.id ?? row.ID ?? idx + 1).trim() &&
+          String(p.paid).toLowerCase().trim() === "yes"
+      ).length;
+
       return {
         id: row.id ?? row.ID ?? idx + 1,
         mode,
         subMode: row.subMode ?? row.SubMode ?? "",
         title: row.title ?? row.Title ?? "PK Esports Room",
+
+        // ⭐ Prize Pool
+        prizePool:
+          row.prizePool ??
+          row.PrizePool ??
+          row.prize ??
+          row.Prize ??
+          null,
+
         entryFee,
 
         maxPlayers: Number(
           row.maxPlayers ?? row.MaxPlayers ?? (mode === "BR" ? 48 : 8)
         ),
-        currentPlayers: Number(row.currentPlayers ?? row.CurrentPlayers ?? 0),
+
+        currentPlayers: basePlayers + verifiedPlayers,
 
         minLevel: Number(row.minLevel ?? row.MinLevel ?? 40),
 
-        // TIME FIELDS
         slotOpenTime: row.slotOpenTime ?? row.SlotOpenTime ?? null,
         slotCloseTime: row.slotCloseTime ?? row.SlotCloseTime ?? null,
         matchStartTime: row.matchStartTime ?? row.MatchStartTime ?? null,
@@ -103,7 +146,7 @@ export async function createBooking(booking) {
   }
 }
 
-/* ⭐ NEW: Fetch All Bookings (Fast & Simplified) */
+/* ⭐ Fetch All Bookings */
 export async function fetchBookings() {
   const res = await fetch(BOOKINGS_URL, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to load bookings");

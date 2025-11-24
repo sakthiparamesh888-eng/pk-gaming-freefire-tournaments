@@ -2147,3 +2147,108 @@ button,
 .tab-btn:hover {
   color: #fff;
 }
+.t-countdown {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.t-count-text {
+  color: #f7c97f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.t-count-live {
+  color: #ff4444;
+  font-size: 16px;
+  font-weight: 800;
+  animation: blink 1.2s infinite;
+}
+
+.t-count-finished {
+  color: #bbbbbb;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+/* Mobile responsive card */
+@media (max-width: 480px) {
+  .t-card {
+    width: 92%;
+    margin: 0 auto;
+    padding: 18px 16px;
+    border-radius: 18px;
+  }
+
+  .t-card-content {
+    padding: 0;
+  }
+
+  .t-header h3 {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .t-id {
+    font-size: 12px;
+  }
+
+  .t-category-chip {
+    font-size: 10px;
+    padding: 3px 7px;
+  }
+
+  .t-status {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .t-details div {
+    margin-bottom: 6px;
+  }
+
+  .t-mode {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .t-progress-text {
+    font-size: 12px;
+  }
+
+  .t-times span.t-label {
+    font-size: 12px;
+  }
+
+  .t-times span.t-value {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .t-count-text {
+    font-size: 13px !important;
+    margin-top: 6px;
+  }
+}
+.t-countdown {
+  margin-top: 14px;
+  padding: 8px 0;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+}
+
+.t-count-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffdb99;
+}

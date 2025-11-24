@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import "../styles/tournament-card.css";
 
 import { getLocalUser, fetchBookings } from "../services/sheetsApi";
+import useCountdown from "../hooks/useCountdown";
 
+// Format time helper
 function formatDateTime(value) {
   if (!value) return "-";
 
@@ -28,10 +30,9 @@ function formatDateTime(value) {
 
 export default function TournamentCard({ tournament }) {
   const navigate = useNavigate();
-
-  // ⭐ NEW: Already booked system
   const [alreadyBooked, setAlreadyBooked] = useState(false);
 
+  // Check if user already booked
   useEffect(() => {
     async function checkBooking() {
       const user = getLocalUser();
@@ -51,11 +52,10 @@ export default function TournamentCard({ tournament }) {
         console.error("Booking check failed", err);
       }
     }
-
     checkBooking();
   }, [tournament.id]);
 
-  // ---- Read new structure ----
+  // Extract tournament fields
   const {
     id,
     title,
@@ -72,17 +72,21 @@ export default function TournamentCard({ tournament }) {
     slotCloseTime,
     matchStartTime,
     matchCloseTime,
+    prizePool
   } = tournament;
 
-  // ---------- PROGRESS ----------
+  const safeCurrentPlayers = Number(currentPlayers || 0);
+  const safeMaxPlayers = Number(maxPlayers || 0);
+
+  // Progress
   const filledPct =
-    maxPlayers && maxPlayers > 0
-      ? Math.round((currentPlayers / maxPlayers) * 100)
+    safeMaxPlayers > 0
+      ? Math.round((safeCurrentPlayers / safeMaxPlayers) * 100)
       : 0;
 
-  const slotsFull = maxPlayers && currentPlayers >= maxPlayers;
+  const slotsFull = safeMaxPlayers > 0 && safeCurrentPlayers >= safeMaxPlayers;
 
-  // ---------- TIME CONVERSIONS ----------
+  // Time calculations
   const now = new Date();
 
   const openTime = slotOpenTime ? new Date(slotOpenTime) : null;
@@ -90,41 +94,38 @@ export default function TournamentCard({ tournament }) {
   const startTime = matchStartTime ? new Date(matchStartTime) : null;
   const endTime = matchCloseTime ? new Date(matchCloseTime) : null;
 
-  // ---------- TIME CONDITIONS ----------
   const beforeOpen = openTime && now < openTime;
   const duringBooking = openTime && closeTime && now >= openTime && now <= closeTime;
-  const afterBookingBeforeMatch = closeTime && startTime && now > closeTime && now < startTime;
+  const afterBookingBeforeMatch =
+    closeTime && startTime && now > closeTime && now < startTime;
   const isPlaying = startTime && now >= startTime && (!endTime || now <= endTime);
   const isFinished = endTime && now > endTime;
 
-  // ---------- BUTTON LOGIC ----------
+  // Countdowns
+  const openCountdown = useCountdown(slotOpenTime);
+  const closeCountdown = useCountdown(slotCloseTime);
+  const startCountdown = useCountdown(matchStartTime);
+
+  // Button logic
   let bookLabel = "Book Slot";
   let disabled = false;
 
   if (alreadyBooked) {
-    bookLabel = "Already Booked";
-    disabled = true;
+    bookLabel = "Already Booked"; disabled = true;
   } else if (beforeOpen) {
-    bookLabel = "Coming Soon";
-    disabled = true;
+    bookLabel = "Coming Soon"; disabled = true;
   } else if (duringBooking) {
-    bookLabel = "Book Slot";
-    disabled = false;
+    bookLabel = "Book Slot"; disabled = false;
   } else if (afterBookingBeforeMatch) {
-    bookLabel = "Registration Closed";
-    disabled = true;
+    bookLabel = "Registration Closed"; disabled = true;
   } else if (isPlaying) {
-    bookLabel = "Match Playing";
-    disabled = true;
+    bookLabel = "Match Playing"; disabled = true;
   } else if (slotsFull) {
-    bookLabel = "Slots Full";
-    disabled = true;
+    bookLabel = "Slots Full"; disabled = true;
   } else if (isFinished) {
-    bookLabel = "Match Finished";
-    disabled = true;
+    bookLabel = "Match Finished"; disabled = true;
   }
 
-  // BOOK BUTTON CLICK
   function handleBook() {
     if (disabled) return;
     navigate("/booking", { state: { tournament } });
@@ -136,7 +137,6 @@ export default function TournamentCard({ tournament }) {
 
   return (
     <div className="glass-card t-card">
-      {/* 🔥 Inner background */}
       {image && (
         <div
           className="t-inner-bg"
@@ -191,21 +191,30 @@ export default function TournamentCard({ tournament }) {
         <div className="t-details">
           <div>
             <span className="t-label">Entry</span>
-            <span className="t-value">{entryFee ? `₹${entryFee}` : "Free"}</span>
+            <span className="t-value">{entryFee || "Free"}</span>
           </div>
+
           <div>
             <span className="t-label">Slots</span>
             <span className="t-value">
-              {currentPlayers}/{maxPlayers}
+              {safeCurrentPlayers}/{safeMaxPlayers}
             </span>
           </div>
+
           <div>
             <span className="t-label">Min Level</span>
             <span className="t-value">{minLevel}+</span>
           </div>
+
+          {prizePool && (
+            <div>
+              <span className="t-label">Prize</span>
+              <span className="t-value">₹{prizePool}</span>
+            </div>
+          )}
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress */}
         <div className="t-progress">
           <div className="t-progress-bar">
             <div
@@ -237,7 +246,16 @@ export default function TournamentCard({ tournament }) {
           </div>
         </div>
 
-        {/* BOOK BUTTON */}
+        {/* Countdown */}
+        <div className="t-countdown">
+          {beforeOpen && <p className="t-count-text">Opens in: {openCountdown}</p>}
+          {duringBooking && <p className="t-count-text">Booking closes in: {closeCountdown}</p>}
+          {afterBookingBeforeMatch && <p className="t-count-text">Match starts in: {startCountdown}</p>}
+          {isPlaying && <p className="t-count-live">LIVE NOW</p>}
+          {isFinished && <p className="t-count-finished">Match Finished</p>}
+        </div>
+
+        {/* Book Button */}
         <button
           className="btn-primary btn-full"
           onClick={handleBook}
@@ -246,7 +264,7 @@ export default function TournamentCard({ tournament }) {
           {bookLabel}
         </button>
 
-        {/* ROOM ACCESS */}
+        {/* Room Access */}
         <button className="btn-secondary btn-full" onClick={handleRoomAccess}>
           Room Access
         </button>

@@ -112,8 +112,8 @@ export default function RoomDetailsPage() {
   if (roomData === null) {
     return (
       <div className="page room-page room-details-page glass-card" style={{ padding: 20 }}>
-        <h2>Room Details</h2>
-        <p className="error-text">Room details not updated by admin yet.</p>
+        <h2>Room Details.Pls Join with in 3 mins</h2>
+        <p className="error-text">Room Details Only available at the Starting time of Match Pls Join with in 3 mins.</p>
         <button className="btn-secondary btn-full" onClick={() => navigate("/tournaments")}>
           Back to Tournaments
         </button>
