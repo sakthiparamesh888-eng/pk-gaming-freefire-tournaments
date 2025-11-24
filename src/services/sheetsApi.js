@@ -1,44 +1,41 @@
 // src/services/sheetsApi.js
 
 const TOURNAMENTS_URL = import.meta.env.VITE_SHEETS_TOURNAMENTS_URL; // SHEET 2
-const BOOKINGS_URL = import.meta.env.VITE_SHEETS_BOOKINGS_URL; // SHEET 3
-const USERS_URL = import.meta.env.VITE_SHEETS_USERS_URL; // SHEET 1
+const BOOKINGS_URL = import.meta.env.VITE_SHEETS_BOOKINGS_URL;       // SHEET 3
+const USERS_URL = import.meta.env.VITE_SHEETS_USERS_URL;             // SHEET 1
 
 const LOCAL_USER_KEY = "pk_esports_user";
 
-/**
- * SHEET 2 → Tournaments & availability
- */
+/* ============================================================
+   SHEET 2 → TOURNAMENTS
+============================================================ */
 export async function fetchTournaments() {
-  const res = await fetch(TOURNAMENTS_URL);
+  const res = await fetch(TOURNAMENTS_URL, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to load tournaments from sheet");
 
   const rows = await res.json();
 
   return rows
     .filter((row) => {
-      const avRaw =
-        row.available ??
-        row.Available ??
-        row.availability ??
-        row.Availability ??
-        "";
+      const av =
+        String(
+          row.available ??
+            row.Available ??
+            row.availability ??
+            row.Availability ??
+            ""
+        )
+          .toLowerCase()
+          .trim();
 
-      const av = String(avRaw).toLowerCase().trim();
-
-      return av === "yes" || av === "true" || av === "1" || av === "open";
+      return av === "yes" || av === "true" || av === "open" || av === "1";
     })
     .map((row, idx) => {
       const modeRaw = row.mode ?? row.Mode ?? "";
       let mode = "BR";
-
       if (typeof modeRaw === "string") {
         const m = modeRaw.toLowerCase();
-        if (m === "cs" || m === "clash squad") {
-          mode = "CS";
-        } else {
-          mode = "BR";
-        }
+        if (m === "cs" || m === "clash squad") mode = "CS";
       }
 
       const feeRaw = row.entryFee ?? row.EntryFee ?? 0;
@@ -54,17 +51,22 @@ export async function fetchTournaments() {
         subMode: row.subMode ?? row.SubMode ?? "",
         title: row.title ?? row.Title ?? "PK Esports Room",
         entryFee,
+
         maxPlayers: Number(
           row.maxPlayers ?? row.MaxPlayers ?? (mode === "BR" ? 48 : 8)
         ),
         currentPlayers: Number(row.currentPlayers ?? row.CurrentPlayers ?? 0),
+
         minLevel: Number(row.minLevel ?? row.MinLevel ?? 40),
-        startTime: row.startTime ?? row.StartTime ?? null,
-        closeTime: row.closeTime ?? row.CloseTime ?? null,
+
+        // TIME FIELDS
+        slotOpenTime: row.slotOpenTime ?? row.SlotOpenTime ?? null,
+        slotCloseTime: row.slotCloseTime ?? row.SlotCloseTime ?? null,
+        matchStartTime: row.matchStartTime ?? row.MatchStartTime ?? null,
+        matchCloseTime: row.matchCloseTime ?? row.MatchCloseTime ?? null,
+
         status: row.status ?? row.Status ?? "Open",
         category: row.category ?? row.Category ?? null,
-
-        /* ✅ NEW: Load image column from Google Sheet */
         image: row.image ?? row.Image ?? row.img ?? row.Img ?? null,
 
         available:
@@ -76,54 +78,96 @@ export async function fetchTournaments() {
     });
 }
 
-
-/**
- * SHEET 3 → bookings (when user confirms after GPay)
- */
+/* ============================================================
+   SHEET 3 → BOOKINGS
+============================================================ */
 export async function createBooking(booking) {
   if (!BOOKINGS_URL)
-    throw new Error(
-      "Bookings sheet URL (VITE_SHEETS_BOOKINGS_URL) not configured"
-    );
+    throw new Error("Bookings sheet URL (VITE_SHEETS_BOOKINGS_URL) missing");
 
-  // Use no-cors + text/plain to avoid CORS preflight blocking the request
-  await fetch(BOOKINGS_URL, {
+  const res = await fetch(BOOKINGS_URL, {
     method: "POST",
-    mode: "no-cors",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(booking),
   });
 
-  // We can't read the response in no-cors mode (it will be opaque),
-  // but Apps Script will still receive the JSON string in e.postData.contents
-  // and append a row. Return a dummy object so BookingPage code works.
-  return { success: true };
+  let text = "";
+  try {
+    text = await res.text();
+  } catch {}
+
+  try {
+    return JSON.parse(text); // success / duplicate
+  } catch {
+    return { success: true };
+  }
 }
 
-/**
- * SHEET 1 → user signup details
- */
+/* ⭐ NEW: Fetch All Bookings (Fast & Simplified) */
+export async function fetchBookings() {
+  const res = await fetch(BOOKINGS_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load bookings");
+  return await res.json();
+}
+
+/* ============================================================
+   SHEET 1 → USERS (Signup)
+============================================================ */
 export async function registerUser(user) {
   if (!USERS_URL)
-    throw new Error("Users sheet URL (VITE_SHEETS_USERS_URL) not configured");
+    throw new Error("Users sheet URL (VITE_SHEETS_USERS_URL) missing");
 
-  // Use no-cors + text/plain to avoid CORS preflight blocking the request
-  await fetch(USERS_URL, {
+  const res = await fetch(USERS_URL, {
     method: "POST",
-    mode: "no-cors",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(user),
   });
 
-  // We can't read the response in no-cors mode (it will be "opaque"),
-  // but Apps Script will still receive the JSON string in e.postData.contents
-  // and append a row. We just return a dummy object so LoginPage code works.
-  return { id: undefined };
+  let text = "";
+  try {
+    text = await res.text();
+  } catch {}
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { success: true };
+  }
 }
 
+/* ============================================================
+   LOGIN → Check Phone + Password
+============================================================ */
+export async function loginUser({ phone, password }) {
+  if (!USERS_URL)
+    throw new Error("Users sheet URL (VITE_SHEETS_USERS_URL) missing");
 
-/******** LOCAL LOGIN HELPERS (no backend auth) ********/
+  const res = await fetch(USERS_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load users");
 
+  const rows = await res.json();
+
+  const cleanPhone = String(phone).replace(/[^\d]/g, "");
+
+  const match = rows.find((row) => {
+    const rowPhone = String(row.phone || "").replace(/[^\d]/g, "");
+    const rowPass = String(row.password || "");
+    return rowPhone === cleanPhone && rowPass === String(password);
+  });
+
+  if (!match) return { success: false, error: "invalid_credentials" };
+
+  const user = {
+    gamerName: match.gamerName || "",
+    phone: match.phone,
+  };
+
+  return { success: true, user };
+}
+
+/* ============================================================
+   LOCAL STORAGE HELPERS
+============================================================ */
 export function getLocalUser() {
   try {
     return JSON.parse(localStorage.getItem(LOCAL_USER_KEY) || "null");

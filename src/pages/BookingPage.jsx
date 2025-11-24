@@ -14,6 +14,7 @@ export default function BookingPage() {
 
   const savedUser = getLocalUser();
 
+  // Redirect to login if not logged in
   useEffect(() => {
     if (!savedUser) {
       navigate("/login", {
@@ -24,11 +25,10 @@ export default function BookingPage() {
 
   if (!savedUser) return null;
 
+  // User input fields
   const [form, setForm] = useState({
     ffUid: savedUser?.ffUid || "",
     ffName: savedUser?.ffName || "",
-    realName: savedUser?.gamerName || "",
-    phone: savedUser?.phone || "",
     levelConfirmed: false,
   });
 
@@ -48,6 +48,7 @@ export default function BookingPage() {
     );
   }
 
+  // Handle form input
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
 
@@ -57,42 +58,45 @@ export default function BookingPage() {
       return;
     }
 
-    if (name === "phone") {
-      const cleaned = value.replace(/\D/g, "").slice(0, 10);
-      setForm((prev) => ({ ...prev, phone: cleaned }));
-      return;
-    }
-
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   }
 
-  // ⭐ CORRECT WHATSAPP REDIRECT (VERY FAST + CROSS PLATFORM)
+  // FAST WHATSAPP REDIRECT
   function openWhatsAppFast(text) {
     setLoadingWA(true);
-
     const encoded = encodeURIComponent(text);
 
-    // Clean and normalize number (auto add +91 for 10-digit numbers)
     const raw = String(WHATSAPP_NUM || "").replace(/[^\d]/g, "");
     const fullNumber = raw.length === 10 ? `91${raw}` : raw;
 
     const waWeb = `https://wa.me/${fullNumber}?text=${encoded}`;
     const waApp = `whatsapp://send?phone=${fullNumber}&text=${encoded}`;
 
-    // Try app first (instant on Android/iOS)
     window.location.href = waApp;
-
-    // Fallback for iOS Safari / Desktop
-    setTimeout(() => {
-      window.location.href = waWeb;
-    }, 350);
+    setTimeout(() => (window.location.href = waWeb), 350);
   }
 
+  // Confirm Booking
   async function handleConfirm() {
     if (saving) return;
+
+    const now = new Date();
+
+    const slotOpen = tournament.slotOpenTime ? new Date(tournament.slotOpenTime) : null;
+    const slotClose = tournament.slotCloseTime ? new Date(tournament.slotCloseTime) : null;
+
+    if (slotOpen && now < slotOpen) {
+      alert("Booking not opened yet!");
+      return;
+    }
+
+    if (slotClose && now > slotClose) {
+      alert("Slot Booking Closed!");
+      return;
+    }
 
     if (!form.levelConfirmed) {
       alert("Please confirm that your Free Fire level is 40+.");
@@ -104,12 +108,16 @@ export default function BookingPage() {
       return;
     }
 
-    if (form.ffUid.length < 8) {
+    if (!form.ffUid || form.ffUid.length < 8) {
       alert("Free Fire UID must be at least 8 digits.");
       return;
     }
-    if (!form.phone || form.phone.length !== 10) {
-      alert("Phone must be exactly 10 digits.");
+
+    const realName = savedUser.gamerName;
+    const phone = savedUser.phone;
+
+    if (!phone || String(phone).replace(/\D/g, "").length !== 10) {
+      alert("Your saved WhatsApp number must be 10 digits.");
       return;
     }
 
@@ -124,8 +132,8 @@ export default function BookingPage() {
       entryFee: tournament.entryFee,
       ffUid: form.ffUid,
       ffName: form.ffName,
-      realName: form.realName,
-      phone: form.phone,
+      realName,
+      phone,
       levelConfirmed: !!form.levelConfirmed,
       paidConfirmed: !!paymentDone,
       createdAt: new Date().toISOString(),
@@ -140,8 +148,8 @@ export default function BookingPage() {
       "",
       `FF UID: ${form.ffUid}`,
       `FF Name: ${form.ffName}`,
-      `Real Name: ${form.realName}`,
-      `Phone: ${form.phone}`,
+      `Real Name: ${realName}`,
+      `Phone: ${phone}`,
       "",
       "Level: 40+ (confirmed)",
       "Payment: Done (user confirmed)",
@@ -161,7 +169,7 @@ export default function BookingPage() {
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
-          phone: form.phone,
+          phone,
           match_id: tournament.id,
           paid: "YES",
         }),
@@ -173,27 +181,23 @@ export default function BookingPage() {
       setMessage("Could not save booking, opening WhatsApp anyway.");
     }
 
-    // ⭐ FAST REDIRECTION
     openWhatsAppFast(waMsg);
 
-    // Safely reset + navigate AFTER WA opens
     setTimeout(() => {
       setSaving(false);
       setPaymentDone(false);
-      setForm({
+      setForm((prev) => ({
+        ...prev,
         ffUid: savedUser?.ffUid || "",
         ffName: savedUser?.ffName || "",
-        realName: savedUser?.gamerName || "",
-        phone: savedUser?.phone || "",
         levelConfirmed: false,
-      });
+      }));
       navigate("/tournaments");
     }, 1000);
   }
 
   return (
     <div className="page page-booking glass-card">
-
       {loadingWA && (
         <div className="wa-spinner-overlay">
           <div className="wa-spinner"></div>
@@ -207,63 +211,71 @@ export default function BookingPage() {
         <p><strong>Mode:</strong> {tournament.mode}{tournament.subMode ? " • " + tournament.subMode : ""}</p>
         <p><strong>Entry Fee:</strong> ₹{tournament.entryFee}</p>
         <p><strong>Slots:</strong> {tournament.currentPlayers}/{tournament.maxPlayers}</p>
-        <p><strong>Level Rule:</strong> Level 40+ only.</p>
-
-        <p className="info-text">Using details from your PK Esports account.</p>
       </div>
 
-      <form className="booking-form" onSubmit={(e) => e.preventDefault()}>
+      <div className="booking-details" style={{ marginTop: 16 }}>
+        <p><strong>Gamer Name:</strong> {savedUser.gamerName}</p>
+        <p><strong>WhatsApp:</strong> {savedUser.phone}</p>
+      </div>
+
+      <form className="booking-form" onSubmit={(e) => { e.preventDefault(); handleConfirm(); }}>
+
+        {/* PAYMENT QR SECTION */}
+        <div className="payment-box" style={{
+          marginTop: "20px",
+          padding: "20px",
+          background: "rgba(255,255,255,0.05)",
+          borderRadius: "12px",
+          textAlign: "center"
+        }}>
+          <h3 style={{ marginBottom: "10px" }}>Scan & Pay</h3>
+
+          <img
+            src="/qr-code.png"
+            alt="Payment QR"
+            style={{
+              width: "220px",
+              height: "220px",
+              borderRadius: "10px",
+              marginBottom: "10px"
+            }}
+          />
+
+          <p className="info-text">
+            After payment, check the box below and continue.
+          </p>
+        </div>
+
         <label>
           Free Fire UID
-          <input type="text" name="ffUid" value={form.ffUid} onChange={handleChange} />
+          <input type="text" name="ffUid" value={form.ffUid} onChange={handleChange} placeholder="Enter your Free Fire UID" />
         </label>
 
         <label>
           Free Fire Name
-          <input type="text" name="ffName" value={form.ffName} onChange={handleChange} />
-        </label>
-
-        <label>
-          Original Name
-          <input type="text" name="realName" value={form.realName} onChange={handleChange} />
-        </label>
-
-        <label>
-          Phone Number (WhatsApp)
-          <input type="tel" name="phone" value={form.phone} onChange={handleChange} />
+          <input type="text" name="ffName" value={form.ffName} onChange={handleChange} placeholder="Your Free Fire profile name" />
         </label>
 
         <label className="checkbox-row">
           <input type="checkbox" name="levelConfirmed" checked={form.levelConfirmed} onChange={handleChange} />
-          <span>I confirm my Free Fire level is 40+.</span>
+          My Free Fire level is 40+.
         </label>
 
-        <div className="qr-box">
-          <h3>Scan & Pay</h3>
-          <img src="/qr-code.png" alt="Payment QR Code" className="qr-image" />
-        </div>
-
         <label className="checkbox-row">
-          <input
-            type="checkbox"
-            checked={paymentDone}
-            onChange={(e) => setPaymentDone(e.target.checked)}
-          />
-          <span>I have completed the payment.</span>
+          <input type="checkbox" checked={paymentDone} onChange={() => setPaymentDone(v => !v)} />
+          I have completed the payment.
         </label>
 
         <div className="booking-actions">
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={handleConfirm}
-            disabled={saving || !paymentDone}
-          >
-            Confirm & Send on WhatsApp
+          <button type="submit" className="btn-primary btn-full" disabled={saving}>
+            {saving ? "Saving & Opening WhatsApp…" : "Confirm & Send on WhatsApp"}
+          </button>
+          <button type="button" className="btn-secondary btn-full" onClick={() => navigate("/tournaments")}>
+            Cancel
           </button>
         </div>
 
-        {message && <p className="info-text">{message}</p>}
+        {message && <p className="info-text" style={{ marginTop: 10 }}>{message}</p>}
       </form>
     </div>
   );

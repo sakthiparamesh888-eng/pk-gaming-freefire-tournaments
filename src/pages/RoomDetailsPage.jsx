@@ -1,21 +1,68 @@
+// src/pages/RoomDetailsPage.jsx
+
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import "../styles/global.css"; // keep this
+import "../styles/global.css";
 
 const ROOM_DETAILS_URL = import.meta.env.VITE_SHEETS_ROOM_DETAILS_URL;
+const PLAYER_ACCESS_URL = import.meta.env.VITE_SHEETS_PLAYER_ACCESS_URL;
 
 export default function RoomDetailsPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const matchId = location.state?.matchId || "";
-  const [roomData, setRoomData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const accessPhone = location.state?.phone || "";
+
+  const [roomData, setRoomData] = useState(undefined); // ⭐ IMPORTANT
+  const [isAllowed, setIsAllowed] = useState(false);
+
+  const [loadingAccess, setLoadingAccess] = useState(true);
+  const [loadingRoom, setLoadingRoom] = useState(false);
   const [error, setError] = useState("");
 
+  // ---------------- ACCESS CHECK ----------------
   useEffect(() => {
-    async function loadDetails() {
+    async function verifyAccess() {
+      if (!accessPhone) {
+        setError("Access denied. Invalid phone.");
+        setLoadingAccess(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(PLAYER_ACCESS_URL);
+        const sheet = await res.json();
+
+        const access = sheet.find(
+          (row) =>
+            String(row.phone).trim() === String(accessPhone).trim() &&
+            String(row.match_id).trim() === String(matchId).trim() &&
+            String(row.paid).toLowerCase().trim() === "yes"
+        );
+
+        if (!access) {
+          setError("You have not booked this match or payment is pending.");
+        } else {
+          setIsAllowed(true);
+        }
+      } catch (err) {
+        setError("Server error. Cannot verify your access.");
+      }
+
+      setLoadingAccess(false);
+    }
+
+    verifyAccess();
+  }, [matchId, accessPhone]);
+
+  // ---------------- ROOM DETAILS ----------------
+  useEffect(() => {
+    if (!isAllowed) return;
+
+    async function loadRoom() {
+      setLoadingRoom(true);
+
       try {
         const res = await fetch(ROOM_DETAILS_URL);
         const data = await res.json();
@@ -25,22 +72,22 @@ export default function RoomDetailsPage() {
         );
 
         if (!found) {
-          setError("Room details not updated by admin yet.");
+          setRoomData(null); // ⭐ means NOT FOUND but safe
         } else {
           setRoomData(found);
         }
       } catch (err) {
-        setError("Server error. Could not load room details.");
+        setError("Failed to load room details.");
       }
-      setLoading(false);
+
+      setLoadingRoom(false);
     }
 
-    loadDetails();
-  }, [matchId]);
+    loadRoom();
+  }, [isAllowed, matchId]);
 
-
-  // ---------- LOADING ----------
-  if (loading) {
+  // ---------------- LOADING ----------------
+  if (loadingAccess || loadingRoom || roomData === undefined) {
     return (
       <div className="page room-page room-details-page glass-card" style={{ padding: 20 }}>
         <h2>Loading Room Details…</h2>
@@ -48,27 +95,37 @@ export default function RoomDetailsPage() {
     );
   }
 
-  // ---------- ERROR ----------
+  // ---------------- ERROR ----------------
   if (error) {
     return (
       <div className="page room-page room-details-page glass-card" style={{ padding: 20 }}>
-        <h2>Room Details</h2>
+        <h2>Room Access</h2>
         <p className="error-text">{error}</p>
-        <button
-          className="btn-secondary btn-full"
-          onClick={() => navigate("/tournaments")}
-        >
+        <button className="btn-secondary btn-full" onClick={() => navigate("/tournaments")}>
           Back to Tournaments
         </button>
       </div>
     );
   }
 
-  // ---------- SUCCESS ----------
+  // ---------------- NOT UPDATED YET ----------------
+  if (roomData === null) {
+    return (
+      <div className="page room-page room-details-page glass-card" style={{ padding: 20 }}>
+        <h2>Room Details</h2>
+        <p className="error-text">Room details not updated by admin yet.</p>
+        <button className="btn-secondary btn-full" onClick={() => navigate("/tournaments")}>
+          Back to Tournaments
+        </button>
+      </div>
+    );
+  }
+
+  // ---------------- SUCCESS ----------------
   return (
     <div
       className="page room-page room-details-page glass-card"
-      style={{ padding: 25, maxWidth: 420 ,marginTop:60 }}
+      style={{ padding: 25, maxWidth: 420, marginTop: 60 }}
     >
       <h2>Match Room Details</h2>
 

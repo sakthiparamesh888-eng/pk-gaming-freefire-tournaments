@@ -46,8 +46,8 @@ export default function AccessCheckPage() {
         return;
       }
 
-      // SUCCESS → redirect to Room Details page
-      navigate("/room-details", { state: { matchId: matchId } });
+      // SUCCESS → send phone ALSO!
+      navigate("/room-details", { state: { matchId, phone } });
 
     } catch (err) {
       setError("Server error. Please try again.");
@@ -58,11 +58,7 @@ export default function AccessCheckPage() {
 
   return (
     <div className="room-page-container">
-
-      <div
-        className="page room-page room-access-page glass-card"
-        style={{ padding: 20, maxWidth: 420 }}
-      >
+      <div className="page room-page room-access-page glass-card" style={{ padding: 20, maxWidth: 420 }}>
         <h2>Room Access Verification</h2>
 
         <p className="info-text">
@@ -79,18 +75,9 @@ export default function AccessCheckPage() {
           />
         </label>
 
-        {error && (
-          <p className="error-text" style={{ marginTop: 10 }}>
-            {error}
-          </p>
-        )}
+        {error && <p className="error-text" style={{ marginTop: 10 }}>{error}</p>}
 
-        <button
-          className="btn-primary btn-full"
-          onClick={handleVerify}
-          disabled={loading}
-          style={{ marginTop: 20 }}
-        >
+        <button className="btn-primary btn-full" disabled={loading} onClick={handleVerify} style={{ marginTop: 20 }}>
           {loading ? "Checking…" : "Verify Access"}
         </button>
 
@@ -102,7 +89,6 @@ export default function AccessCheckPage() {
           Back to Tournaments
         </button>
       </div>
-
     </div>
   );
 }

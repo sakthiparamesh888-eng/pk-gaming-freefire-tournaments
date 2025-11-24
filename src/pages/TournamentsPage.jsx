@@ -30,8 +30,10 @@ export default function TournamentsPage() {
   }, []);
 
   const filtered = tournaments.filter((t) => {
+    // Mode filter
     if (modeFilter !== "ALL" && t.mode !== modeFilter) return false;
 
+    // CS submode filter
     if (
       modeFilter === "CS" &&
       csTypeFilter !== "ALL" &&
@@ -40,6 +42,7 @@ export default function TournamentsPage() {
       return false;
     }
 
+    // Search filter (id or title)
     if (
       searchText &&
       !(
@@ -56,9 +59,7 @@ export default function TournamentsPage() {
   return (
     <div className="page page-tournaments">
       <h1 className="page-title"></h1>
-      <p className="page-subtitle">
-        
-      </p>
+      <p className="page-subtitle"></p>
 
       <CategoryFilter
         modeFilter={modeFilter}
@@ -78,9 +79,10 @@ export default function TournamentsPage() {
             No tournaments match the filter right now. Check again later.
           </p>
         )}
-        {filtered.map((t) => (
-          <TournamentCard key={t.id} tournament={t} image={t.image} />
 
+        {/* MAIN LOOP */}
+        {filtered.map((t) => (
+          <TournamentCard key={t.id} tournament={t} />
         ))}
       </div>
     </div>
