@@ -96,7 +96,7 @@ export default function HomePage() {
       <div className="page page-home">
         {/* Top hero text */}
         <section className="hero-main glass-card hero-main-neon">
-          <h1>BR Esport Tournaments & CS Battles</h1>
+          <h1>PK Esports Arenas</h1>
           <p>
             PAN-India Free Fire tournaments powered by PK Esports — secure
             rooms, anti-cheat monitoring, live DB slot tracking & instant
