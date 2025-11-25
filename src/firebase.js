@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAOWcKKXMg17-vqTL6wyvF4uxnCUrM4cZI",
+  apiKey: "AIzaSyBkptO89ohwpOX3kG3YIIu7oXhI16xA5DM",
   authDomain: "pk-esports-d5dd8.firebaseapp.com",
   projectId: "pk-esports-d5dd8",
   storageBucket: "pk-esports-d5dd8.appspot.com",

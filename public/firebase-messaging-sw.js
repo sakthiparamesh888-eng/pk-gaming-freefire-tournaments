@@ -2,7 +2,7 @@ importScripts("https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"
 importScripts("https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js");
 
 firebase.initializeApp({
-  apiKey: "AIzaSyAOWcKKXMg17-vqTL6wyvF4uxnCUrM4cZI",
+  apiKey: "AIzaSyBkptO89ohwpOX3kG3YIIu7oXhI16xA5DM",
   authDomain: "pk-esports-d5dd8.firebaseapp.com",
   projectId: "pk-esports-d5dd8",
   storageBucket: "pk-esports-d5dd8.appspot.com",

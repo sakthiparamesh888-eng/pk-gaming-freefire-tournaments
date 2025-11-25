@@ -55,7 +55,11 @@ function AppLayout() {
   );
 }
 
+import { useMatchPolling } from "./hooks/useMatchPolling";
+
 export default function App() {
+  useMatchPolling(); // 🔥 Start polling for new matches
+
   return (
     <Suspense fallback={<div className="loading-screen">Loading...</div>}>
       <Routes>

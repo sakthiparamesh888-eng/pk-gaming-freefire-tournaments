@@ -1,6 +1,20 @@
-import { requestFcmToken } from "../firebase";
+import { useEffect } from "react";
+import { requestFcmToken, messaging } from "../firebase";
+import { onMessage } from "firebase/messaging";
 
 export function useNotificationSetup() {
+
+  // 🔥 Listen for foreground messages
+  useEffect(() => {
+    const unsubscribe = onMessage(messaging, (payload) => {
+      console.log("[Foreground] Message received: ", payload);
+      const { title, body } = payload.notification || {};
+      alert(`🔔 ${title}\n\n${body}`);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const enableNotifications = async (phone) => {
     if (!phone) {
       alert("Phone number missing!");
@@ -19,7 +33,7 @@ export function useNotificationSetup() {
 
     // 2️⃣ Google Script URL (replace with your URL)
     const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbw1yPfjabEXFvY-r7rBQo5fCDYrnrF5FAYelKD3Sa_QSSmTpzqtBs4aUe4lGwdj1_-K/exec";
+      "https://script.google.com/macros/s/AKfycbw1yPfjabEXFvY-r7rBQo5fCDYrnrF5FAYelKD3Sa_QSSmTpzqtBs4aUe4lGwdj1_-K/exec";
 
     // 3️⃣ Send token to Google Sheet — MUST use text/plain
     const res = await fetch(SCRIPT_URL + "?table=users", {
