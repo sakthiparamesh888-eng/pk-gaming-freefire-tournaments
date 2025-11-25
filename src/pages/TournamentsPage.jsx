@@ -81,9 +81,11 @@ export default function TournamentsPage() {
         <div className="popup-overlay">
           <div className="popup-box glass-card">
             <h2>Only Squad Entry Allowed</h2>
-            <p>
-              This tournament accepts only full squad registrations.
-            </p>
+<p>
+  For squads, only <strong>1 player needs to register</strong>.  
+  Your full team will be added by the admin after confirmation.
+</p>
+
 
             <button
               className="btn-primary"
