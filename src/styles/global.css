@@ -2252,3 +2252,1539 @@ button,
   font-weight: 600;
   color: #ffdb99;
 }
+/* ============================
+   HERO SLIDER – ULTRA GLASS CARD
+   ============================ */
+
+.hero-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.hero-slider-tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #facc6b;
+  margin-bottom: 4px;
+}
+
+.hero-slider-title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* Dots */
+.hero-slider-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.hero-slider-dots .hero-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hero-slider-dots .hero-dot.active {
+  width: 18px;
+  background: linear-gradient(90deg, #ff8b3d, #ffd29a);
+  box-shadow: 0 0 10px rgba(255, 163, 90, 0.8);
+}
+
+/* Card Shell */
+.pk-card-shell {
+  margin-top: 6px;
+}
+
+/* Main animated card */
+.pk-card {
+  position: relative;
+  border-radius: 26px;
+  padding: 18px 18px 20px;
+  background: radial-gradient(circle at 0 0, rgba(255, 166, 90, 0.22), transparent 55%),
+              radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.85), #020617);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(255, 125, 44, 0.5);
+  overflow: hidden;
+  backdrop-filter: blur(26px) saturate(1.7);
+  transform-style: preserve-3d;
+  animation: pkCardFloat 6s ease-in-out infinite alternate;
+}
+
+/* Soft moving glow behind content */
+.pk-card-blur {
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255, 189, 120, 0.5), transparent 55%),
+    radial-gradient(circle at 90% 100%, rgba(64, 196, 255, 0.3), transparent 60%);
+  filter: blur(20px);
+  opacity: 0.8;
+  pointer-events: none;
+  animation: pkGlowMove 11s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+.pk-card-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Top row */
+.pk-card-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pk-card-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.pk-card-dot-status {
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #f97373;
+}
+
+.pk-card-dot-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #f97373;
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.9);
+}
+
+/* Titles */
+.pk-card-subtitle {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(248, 250, 252, 0.8);
+  margin: 2px 0 4px;
+}
+
+.pk-card-title {
+  font-size: 1.4rem;
+  margin: 2px 0 6px;
+}
+
+.pk-card-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* Meta row */
+.pk-card-metarow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pk-card-meta-box {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.78rem;
+}
+
+.pk-meta-label {
+  display: block;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+}
+
+.pk-meta-value {
+  font-weight: 600;
+}
+
+/* CTA area */
+.pk-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.pk-card-btn-main {
+  padding-inline: 20px;
+}
+
+.pk-card-mini-text {
+  font-size: 0.78rem;
+  color: rgba(248, 250, 252, 0.8);
+}
+
+/* Hover tilt for desktop only */
+@media (hover: hover) and (pointer: fine) {
+  .pk-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow:
+      0 26px 60px rgba(0, 0, 0, 0.95),
+      0 0 26px rgba(255, 140, 70, 0.8);
+  }
+}
+
+/* Animations */
+@keyframes pkCardFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes pkGlowMove {
+  0% {
+    transform: translate3d(-8px, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(10px, -6px, 0) scale(1.06);
+  }
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .pk-card {
+    padding: 16px 14px 18px;
+    border-radius: 22px;
+  }
+
+  .pk-card-title {
+    font-size: 1.2rem;
+  }
+
+  .pk-card-metarow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .pk-card-meta-box {
+    padding: 6px 8px;
+  }
+
+  .pk-card-desc {
+    font-size: 0.86rem;
+  }
+
+  .pk-card-mini-text {
+    font-size: 0.74rem;
+  }
+}
+/* ============================
+   HERO SLIDER – MODAL GLASS UI
+   ============================ */
+
+.hero-section {
+  margin-bottom: 18px;
+}
+
+/* Header */
+.hero-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.hero-slider-tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #facc6b;
+  margin-bottom: 4px;
+}
+
+.hero-slider-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+/* Dots */
+.hero-slider-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.hero-slider-dots .hero-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hero-slider-dots .hero-dot.active {
+  width: 18px;
+  background: linear-gradient(90deg, #ff8b3d, #ffd29a);
+  box-shadow: 0 0 10px rgba(255, 163, 90, 0.8);
+}
+
+/* Card shell – center like a modal */
+.pk-card-shell {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Main card */
+.pk-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 28px;
+  padding: 20px 18px 20px;
+  background: radial-gradient(circle at 0 0, rgba(255, 166, 90, 0.26), transparent 55%),
+              radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.95), #020617);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(255, 130, 60, 0.6);
+  overflow: hidden;
+  backdrop-filter: blur(26px) saturate(1.7);
+  transform-style: preserve-3d;
+  animation: pkCardFloat 6s ease-in-out infinite alternate;
+}
+
+/* Soft moving glow behind content */
+.pk-card-blur {
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255, 189, 120, 0.55), transparent 55%),
+    radial-gradient(circle at 90% 100%, rgba(64, 196, 255, 0.32), transparent 60%);
+  filter: blur(22px);
+  opacity: 0.85;
+  pointer-events: none;
+  animation: pkGlowMove 11s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+.pk-card-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Top row */
+.pk-card-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.pk-card-pill {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.pk-card-dot-status {
+  font-size: 0.76rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #f97373;
+}
+
+.pk-card-dot-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #f97373;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.9);
+}
+
+/* Titles */
+.pk-card-subtitle {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(248, 250, 252, 0.86);
+  margin: 2px 0 4px;
+}
+
+.pk-card-title {
+  font-size: 1.35rem;
+  margin: 2px 0 8px;
+}
+
+.pk-card-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 13px;
+}
+
+/* Meta row */
+.pk-card-metarow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pk-card-meta-box {
+  padding: 8px 10px;
+  border-radius: 13px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.78rem;
+}
+
+.pk-meta-label {
+  display: block;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+}
+
+.pk-meta-value {
+  font-weight: 600;
+}
+
+/* CTA */
+.pk-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.pk-card-btn-main {
+  padding-inline: 20px;
+}
+
+.pk-card-mini-text {
+  font-size: 0.78rem;
+  color: rgba(248, 250, 252, 0.86);
+}
+
+/* Hover bump for desktop only */
+@media (hover: hover) and (pointer: fine) {
+  .pk-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow:
+      0 26px 65px rgba(0, 0, 0, 0.95),
+      0 0 30px rgba(255, 140, 70, 0.85);
+  }
+}
+
+/* Float + glow animations */
+@keyframes pkCardFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes pkGlowMove {
+  0% {
+    transform: translate3d(-10px, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(12px, -6px, 0) scale(1.06);
+  }
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .pk-card {
+    padding: 18px 14px 18px;
+    border-radius: 24px;
+    max-width: 340px;
+  }
+
+  .pk-card-title {
+    font-size: 1.2rem;
+  }
+
+  .pk-card-desc {
+    font-size: 0.86rem;
+  }
+
+  .pk-card-meta-box {
+    padding: 6px 8px;
+  }
+
+  .pk-card-mini-text {
+    font-size: 0.74rem;
+  }
+}
+
+/* ============================
+   RULES CARDS – MODERN LOOK
+   ============================ */
+
+.home-highlight {
+  margin-top: 12px;
+}
+
+.home-highlight h2 {
+  margin-bottom: 8px;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.home-chip {
+  position: relative;
+  padding: 14px 14px 12px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+}
+
+.home-chip::before {
+  content: "";
+  position: absolute;
+  inset-inline: 16px;
+  top: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff7b2d, #ffd29a);
+  opacity: 0.9;
+}
+
+.home-chip h3 {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+}
+
+.home-chip p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+/* Mobile rules */
+@media (max-width: 480px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-chip {
+    padding: 12px 12px 10px;
+  }
+}
+/* ============================
+   HERO SLIDER – MODAL GLASS UI
+   ============================ */
+
+.hero-section {
+  margin-bottom: 18px;
+}
+
+/* Header */
+.hero-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.hero-slider-tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #facc6b;
+  margin-bottom: 4px;
+}
+
+.hero-slider-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+/* Dots */
+.hero-slider-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.hero-slider-dots .hero-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hero-slider-dots .hero-dot.active {
+  width: 18px;
+  background: linear-gradient(90deg, #ff8b3d, #ffd29a);
+  box-shadow: 0 0 10px rgba(255, 163, 90, 0.8);
+}
+
+/* Card shell – center like a modal */
+.pk-card-shell {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Main card */
+.pk-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 28px;
+  padding: 20px 18px 20px;
+  background: radial-gradient(circle at 0 0, rgba(255, 166, 90, 0.26), transparent 55%),
+              radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.95), #020617);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(255, 130, 60, 0.6);
+  overflow: hidden;
+  backdrop-filter: blur(26px) saturate(1.7);
+  transform-style: preserve-3d;
+  animation: pkCardFloat 6s ease-in-out infinite alternate;
+}
+
+/* Soft moving glow behind content */
+.pk-card-blur {
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(255, 189, 120, 0.55), transparent 55%),
+    radial-gradient(circle at 90% 100%, rgba(64, 196, 255, 0.32), transparent 60%);
+  filter: blur(22px);
+  opacity: 0.85;
+  pointer-events: none;
+  animation: pkGlowMove 11s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+.pk-card-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Top row */
+.pk-card-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.pk-card-pill {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.pk-card-dot-status {
+  font-size: 0.76rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #f97373;
+}
+
+.pk-card-dot-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #f97373;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.9);
+}
+
+/* Titles */
+.pk-card-subtitle {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(248, 250, 252, 0.86);
+  margin: 2px 0 4px;
+}
+
+.pk-card-title {
+  font-size: 1.35rem;
+  margin: 2px 0 8px;
+}
+
+.pk-card-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 13px;
+}
+
+/* Meta row */
+.pk-card-metarow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pk-card-meta-box {
+  padding: 8px 10px;
+  border-radius: 13px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.78rem;
+}
+
+.pk-meta-label {
+  display: block;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+}
+
+.pk-meta-value {
+  font-weight: 600;
+}
+
+/* CTA */
+.pk-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.pk-card-btn-main {
+  padding-inline: 20px;
+}
+
+.pk-card-mini-text {
+  font-size: 0.78rem;
+  color: rgba(248, 250, 252, 0.86);
+}
+
+/* Hover bump for desktop only */
+@media (hover: hover) and (pointer: fine) {
+  .pk-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow:
+      0 26px 65px rgba(0, 0, 0, 0.95),
+      0 0 30px rgba(255, 140, 70, 0.85);
+  }
+}
+
+/* Float + glow animations */
+@keyframes pkCardFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes pkGlowMove {
+  0% {
+    transform: translate3d(-10px, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(12px, -6px, 0) scale(1.06);
+  }
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .pk-card {
+    padding: 18px 14px 18px;
+    border-radius: 24px;
+    max-width: 340px;
+  }
+
+  .pk-card-title {
+    font-size: 1.2rem;
+  }
+
+  .pk-card-desc {
+    font-size: 0.86rem;
+  }
+
+  .pk-card-meta-box {
+    padding: 6px 8px;
+  }
+
+  .pk-card-mini-text {
+    font-size: 0.74rem;
+  }
+}
+
+/* ============================
+   RULES CARDS – MODERN LOOK
+   ============================ */
+
+.home-highlight {
+  margin-top: 12px;
+}
+
+.home-highlight h2 {
+  margin-bottom: 8px;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.home-chip {
+  position: relative;
+  padding: 14px 14px 12px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+}
+
+.home-chip::before {
+  content: "";
+  position: absolute;
+  inset-inline: 16px;
+  top: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff7b2d, #ffd29a);
+  opacity: 0.9;
+}
+
+.home-chip h3 {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+}
+
+.home-chip p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+/* Mobile rules */
+@media (max-width: 480px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-chip {
+    padding: 12px 12px 10px;
+  }
+}
+/* ==============================
+   ULTRA MODERN ESPORTS CARD
+   PK ESPORTS – GLASS + NEON UI
+=================================*/
+
+.pk-card-shell {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.pk-card {
+  width: 92%;
+  background: rgba(20, 20, 30, 0.55);
+  border-radius: 22px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  animation: fadeIn 0.6s ease;
+}
+
+/* Soft moving gradient light */
+.pk-card::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  width: 180%;
+  height: 180%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 120, 50, 0.4),
+    rgba(0, 0, 0, 0)
+  );
+  animation: rotateGlow 10s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateGlow {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+/* CONTENT INSIDE */
+.pk-card-inner {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+/* Pill Tag */
+.pk-card-pill {
+  padding: 5px 12px;
+  font-size: 12px;
+  background: rgba(255, 140, 70, 0.25);
+  border: 1px solid rgba(255, 140, 70, 0.5);
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* LIVE SOON */
+.pk-card-dot-status {
+  color: #ff6b6b;
+  font-weight: 600;
+  margin-left: auto;
+  font-size: 12px;
+}
+
+/* Small subtitle */
+.pk-card-subtitle {
+  margin-top: 8px;
+  opacity: 0.8;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+}
+
+/* Title */
+.pk-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-top: 8px;
+  line-height: 1.2;
+}
+
+/* Description */
+.pk-card-desc {
+  margin-top: 6px;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Meta Boxes */
+.pk-card-metarow {
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+}
+
+.pk-card-meta-box {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 12px;
+  border-radius: 12px;
+  min-width: 75px;
+}
+
+.pk-meta-label {
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  opacity: 0.75;
+}
+
+.pk-meta-value {
+  font-size: 16px;
+  margin-top: 2px;
+  display: block;
+  font-weight: 700;
+}
+
+/* Main Button */
+.pk-card-btn-main {
+  margin-top: 16px;
+  display: inline-block;
+  text-align: center;
+  background: linear-gradient(135deg, #ff914d, #ff5e20);
+  padding: 12px 16px;
+  border-radius: 14px;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none !important; /* removes underline */
+  transition: 0.2s ease;
+}
+
+.pk-card-btn-main:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 10px rgba(255, 130, 50, 0.6);
+}
+
+/* Footer tiny text */
+.pk-card-mini-text {
+  margin-top: 6px;
+  display: block;
+  opacity: 0.65;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* Remove underline globally for all slider buttons */
+.pk-card a {
+  text-decoration: none !important;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* -------- Card Container -------- */
+.pk-card-shell {
+  width: 100%;
+  padding: 0 14px; /* fixed alignment */
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* -------- Card -------- */
+.pk-card {
+  width: 100%;
+  max-width: 360px; /* perfect for mobile */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(22px);
+  border-radius: 22px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+}
+
+/* soft gradient */
+.pk-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 98, 0, 0.25), rgba(26, 26, 26, 0.4));
+  pointer-events: none;
+}
+
+/* -------- Card Inner -------- */
+.pk-card-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* -------- Top Row -------- */
+.pk-card-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pk-card-pill {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pk-card-dot-status {
+  color: #ff5555;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* -------- Text -------- */
+.pk-card-subtitle {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.pk-card-title {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.pk-card-desc {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 16px;
+  color: #e6e6e6;
+}
+
+/* -------- Meta Boxes -------- */
+.pk-card-metarow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.pk-card-meta-box {
+  background: rgba(255, 255, 255, 0.1);
+  width: 31%;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.pk-meta-label {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.pk-meta-value {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* -------- CTA Button -------- */
+.pk-card-actions {
+  text-align: center;
+}
+
+.pk-card-btn-main {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  background: linear-gradient(90deg, #ff8a22, #ff5f1b);
+  color: #fff !important;
+  text-decoration: none !important;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 6px 20px rgba(255, 95, 0, 0.35);
+}
+
+.pk-card-btn-main:hover {
+  opacity: 0.9;
+}
+
+.pk-card-mini-text {
+  display: block;
+  margin-top: 10px;
+  font-size: 10px;
+  opacity: 0.7;
+}
+/* Fix meta row overflow on small screens */
+.pk-card-metarow {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;             /* ⭐ allows boxes to wrap instead of overflowing */
+}
+
+.pk-card-meta-box {
+  flex: 1 1 30%;               /* ⭐ adapts size per screen */
+  min-width: 70px;
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.09);
+  backdrop-filter: blur(4px);
+}
+
+/* Smaller text on mobile */
+@media (max-width: 420px) {
+  .pk-card-meta-box .pk-meta-value {
+    font-size: 0.95rem;
+  }
+  .pk-card-meta-box .pk-meta-label {
+    font-size: 0.75rem;
+  }
+  .pk-card-inner {
+    padding: 18px !important;  /* more breathing room */
+  }
+}
+/* ==============================
+   HERO SLIDER HEADER – NEON
+=================================*/
+
+.hero-section.hero-section-neon {
+  margin-top: 14px;
+}
+
+.hero-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.hero-slider-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-slider-pill {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.hero-slider-title {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* dots */
+.hero-slider-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.hero-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.hero-dot.active {
+  width: 16px;
+  background: linear-gradient(90deg, #ff9933, #ff4d1a);
+}
+
+/* ==============================
+   PK ESPORTS NEON CARD
+=================================*/
+
+.pk-card-shell {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 4px 10px 14px;
+}
+
+.pk-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 24px;
+  padding: 1px;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at top left, #ff9933, #ff4d1a);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9);
+}
+
+/* inner glass layer */
+.pk-card-inner {
+  border-radius: 22px;
+  background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.12), rgba(7, 10, 24, 0.96));
+  padding: 18px 18px 16px;
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+/* subtle moving glow */
+.pk-card-glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 10% 0%, rgba(255, 153, 51, 0.65), transparent 60%);
+  opacity: 0.8;
+  filter: blur(16px);
+  z-index: 0;
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes heroGlow {
+  from {
+    transform: translate3d(-10px, 0, 0);
+    opacity: 0.7;
+  }
+  to {
+    transform: translate3d(10px, 6px, 0);
+    opacity: 1;
+  }
+}
+
+/* top row */
+.pk-card-toprow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pk-card-pill {
+  background: rgba(0, 0, 0, 0.65);
+  padding: 5px 12px;
+  border-radius: 18px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* live wrap */
+.pk-live-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.pk-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff4b61;
+  box-shadow: 0 0 10px #ff4b61;
+  animation: pulseLive 1.3s infinite;
+}
+
+.pk-live-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffb3ba;
+  letter-spacing: 0.12em;
+}
+
+@keyframes pulseLive {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* subtitle & title */
+.pk-card-subtitle {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.pk-card-title {
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* description */
+.pk-card-desc {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 14px;
+}
+
+/* meta row */
+.pk-card-metarow {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.pk-card-meta-box {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 8px;
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: center;
+}
+
+.pk-meta-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  opacity: 0.78;
+}
+
+.pk-meta-value {
+  display: block;
+  margin-top: 3px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* CTA button */
+.pk-card-actions {
+  text-align: center;
+}
+
+.pk-card-btn-main {
+  display: inline-block;
+  width: 100%;
+  padding: 11px 0;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #ff9a3c, #ff5a1f);
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  cursor: pointer;
+  text-decoration: none !important;
+  color: #1b0b04;
+  box-shadow: 0 12px 26px rgba(255, 90, 31, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.pk-card-btn-main:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px rgba(255, 90, 31, 0.85);
+}
+
+.pk-card-btn-main:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(255, 90, 31, 0.6);
+}
+
+.pk-card-mini-text {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  opacity: 0.72;
+}
+
+/* ==============================
+   HERO MAIN + RULES SECTION
+=================================*/
+
+.hero-main.hero-main-neon {
+  text-align: center;
+  border-radius: 26px;
+  padding: 18px 16px;
+  margin-top: 70px;
+}
+
+.hero-main.hero-main-neon h1 {
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.hero-main.hero-main-neon p {
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* rules */
+.rules-card {
+  margin-top: 18px;
+  border-radius: 24px;
+}
+
+.rules-card h2 {
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.rules-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rule-chip {
+  padding: 12px 10px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rule-chip h3 {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.rule-chip p {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* mobile tweaks */
+@media (max-width: 420px) {
+  .pk-card-inner {
+    padding: 16px 14px 14px;
+  }
+
+  .pk-card-title {
+    font-size: 18px;
+  }
+
+  .pk-card-desc {
+    font-size: 12px;
+  }
+
+  .pk-meta-value {
+    font-size: 13px;
+  }
+}

@@ -6,7 +6,7 @@ import BackgroundVideo from "../components/BackgroundVideo.jsx";
 export default function HomePage() {
   const brSlides = [
     {
-      tag: "BR Tournament",
+      tag: "BR TOURNAMENT",
       title: "Daily BR Custom Rooms",
       description: "48 players, intense zone fights, zero hackers.",
       ctaText: "View BR Tournaments",
@@ -14,7 +14,7 @@ export default function HomePage() {
       meta: { entry: 29, prize: 499, size: 48 },
     },
     {
-      tag: "Rank Push",
+      tag: "RANK PUSH",
       title: "Diamond to Heroic Grind",
       description: "Level 40+ only. Sweat lobbies for serious grinders.",
       ctaText: "Join Now",
@@ -22,7 +22,7 @@ export default function HomePage() {
       meta: { entry: 59, prize: 999, size: 48 },
     },
     {
-      tag: "Weekend Special",
+      tag: "WEEKEND SPECIAL",
       title: "Triple Prize Pool Sunday",
       description: "Limited lobbies, triple prize money, live stream.",
       ctaText: "Check Schedule",
@@ -30,7 +30,7 @@ export default function HomePage() {
       meta: { entry: 79, prize: 1999, size: 48 },
     },
     {
-      tag: "Clan Wars",
+      tag: "CLAN WARS",
       title: "Clan vs Clan BR Battles",
       description: "Represent your clan and dominate the map.",
       ctaText: "Register Clan",
@@ -38,7 +38,7 @@ export default function HomePage() {
       meta: { entry: 49, prize: 1499, size: 48 },
     },
     {
-      tag: "No Emulators",
+      tag: "NO EMULATORS",
       title: "Mobile Only Fair Play",
       description: "Device check, strict rules, no cheating tolerated.",
       ctaText: "View Rules",
@@ -49,7 +49,7 @@ export default function HomePage() {
 
   const csSlides = [
     {
-      tag: "CS 1v1",
+      tag: "CS 1V1",
       title: "1v1 Ego Fights",
       description: "Prove your aim. Pure 1v1, no excuses.",
       ctaText: "View CS Tournaments",
@@ -57,7 +57,7 @@ export default function HomePage() {
       meta: { entry: 19, prize: 299, size: 2 },
     },
     {
-      tag: "CS 2v2",
+      tag: "CS 2V2",
       title: "Duo Clutch Rooms",
       description: "Perfect for best friends and duo mains.",
       ctaText: "Book a Slot",
@@ -65,7 +65,7 @@ export default function HomePage() {
       meta: { entry: 29, prize: 499, size: 4 },
     },
     {
-      tag: "CS 3v3",
+      tag: "CS 3V3",
       title: "Trios Tactics",
       description: "Coordination and callouts win these lobbies.",
       ctaText: "Check CS Slots",
@@ -73,7 +73,7 @@ export default function HomePage() {
       meta: { entry: 39, prize: 799, size: 6 },
     },
     {
-      tag: "CS 4v4",
+      tag: "CS 4V4",
       title: "Full Squad Faceoff",
       description: "Classic esports style 4v4 battles.",
       ctaText: "See Prize Pool",
@@ -81,7 +81,7 @@ export default function HomePage() {
       meta: { entry: 49, prize: 1299, size: 8 },
     },
     {
-      tag: "Ranked CS",
+      tag: "RANKED CS",
       title: "Ranked Clash Squad Rooms",
       description: "Sweaty ranked feel with custom rules.",
       ctaText: "Join Ranked CS",
@@ -93,52 +93,50 @@ export default function HomePage() {
   return (
     <BackgroundVideo>
       <div className="page page-home">
-        <section className="hero-main glass-card">
+        {/* Top hero text */}
+        <section className="hero-main glass-card hero-main-neon">
           <h1>BR Esport Tournaments & CS Battles</h1>
           <p>
-            PAN-India Free Fire tournaments powered by PK Esports — featuring
-            secure rooms, anti-cheat monitoring, live Data-Base slot tracking,
-            and lightning-fast WhatsApp confirmations.
+            PAN-India Free Fire tournaments powered by PK Esports — secure
+            rooms, anti-cheat monitoring, live DB slot tracking & instant
+            WhatsApp confirmations.
           </p>
         </section>
 
+        {/* BR + CS sliders */}
         <HeroSlider sectionTitle="BR Esport Tournaments" slides={brSlides} />
         <HeroSlider sectionTitle="CS Tournaments" slides={csSlides} />
 
-        <section className="home-highlight glass-card">
-          <h2>RULES TO BE FOLLWED :</h2>
-          <div className="home-grid">
-            <div className="home-chip">
+        {/* Rules section */}
+        <section className="home-highlight glass-card rules-card">
+          <h2>RULES TO BE FOLLOWED</h2>
+          <div className="rules-grid">
+            <div className="rule-chip">
               <h3>Anti-Cheat & Fair Play</h3>
               <p>
-                Hackers / Macro / Panel = Instant Ban Any form of cheating
-                (Aimbot, ESP, GFX hacks, Macros, Mouse Panel, Keymapping,
-                Headshot tools) leads to permanent ban from all PK Esports
-                tournaments. Suspicious gameplay will be reviewed using killcam
-                and admin monitoring. If caught, the entire squad may be
-                disqualified depending on the case.
+                Hackers / Macro / Panel = instant ban. Any form of cheating
+                (Aimbot, ESP, GFX hacks, macros, mouse panel, keymapping,
+                headshot tools) leads to permanent ban from PK Esports
+                tournaments. Suspicious gameplay will be reviewed by admin.
               </p>
             </div>
 
-            <div className="home-chip">
+            <div className="rule-chip">
               <h3>Device & Account Rules</h3>
               <p>
-                Only 1 PC Player Per Team Allowed . Only Level 40+ accounts
-                permitted to avoid smurfing & unfair advantages. Switching
-                devices, sharing accounts, or using guest accounts is not
-                allowed. Players must join using the same UID submitted during
-                booking.
+                Only 1 PC player per team allowed. Level 40+ accounts only.
+                Switching devices, sharing accounts, or guest accounts are not
+                allowed. Players must join using the same UID given in booking.
               </p>
             </div>
 
-            <div className="home-chip">
+            <div className="rule-chip">
               <h3>Behaviour & Match Rules</h3>
               <p>
-                Respect, Discipline & Timings Toxic behaviour, abuse, or
-                spamming in WhatsApp lobby = instant removal. Players must join
-                rooms within 2 minutes after ID/PW is shared. No unnecessary
-                delays, AFK, teaming, or intentional griefing. Admin decision is
-                final in case of conflicts or disputes.
+                Respect & discipline are mandatory. Toxic behaviour or spam in
+                WhatsApp lobby = instant removal. Join rooms within 2 minutes
+                after ID/PW is shared. No teaming, griefing or AFK. Admin
+                decision is final.
               </p>
             </div>
           </div>

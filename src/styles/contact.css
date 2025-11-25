@@ -133,3 +133,538 @@
 .contact-item a {
   color: #e5e7eb !important;
 }
+/* ============================
+   CONTACT PAGE — MODERN UI
+   PK ESPORTS THEME UPGRADE
+============================= */
+
+/* MAIN PAGE CONTAINER */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  color: #fff;
+  animation: fadeSlide 0.6s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* PAGE TITLE */
+.page-title {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-align: center;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #ffb36b, #ffd9a3);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  opacity: 0.85;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* GLASS CARD SHELL */
+.contact-card {
+  width: 100%;
+  max-width: 950px;
+  padding: 35px 25px;
+  border-radius: 25px;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.45),
+              inset 0 0 15px rgba(255, 255, 255, 0.05);
+
+  transform: translateY(0);
+  transition: all 0.35s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+}
+
+.contact-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.contact-desc {
+  font-size: 15px;
+  opacity: 0.9;
+  margin-bottom: 28px;
+}
+
+/* GRID LAYOUT */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* CONTACT ITEM CARD */
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 18px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  text-decoration: none;
+  transition: 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover Glow */
+.contact-item::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 180%;
+  height: 180%;
+  background: radial-gradient(circle, rgba(255, 153, 70, 0.25), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.contact-item:hover::before {
+  opacity: 1;
+}
+
+.contact-item:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-4px);
+}
+
+/* ICONS */
+.contact-icon {
+  font-size: 32px;
+  color: #a8c7ff;
+  text-shadow: 0 0 10px rgba(150, 180, 255, 0.5);
+}
+
+.contact-icon.insta {
+  color: #ff66b3;
+}
+
+.contact-icon.fb {
+  color: #4e8cff;
+}
+
+.contact-icon.yt {
+  color: #ff3d3d;
+}
+
+/* TEXT */
+.contact-item h3 {
+  font-size: 18px;
+  margin: 0;
+  color: #fff;
+}
+
+.contact-item p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.85;
+  color: #e8e8e8;
+}
+
+/* WHATSAPP MAIN BUTTON */
+.btn-full {
+  display: inline-block;
+  width: 100%;
+  margin-top: 25px;
+  padding: 14px 20px;
+
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 700;
+
+  background: linear-gradient(135deg, #ff8a34, #ffb26b);
+  color: #000;
+  text-align: center;
+  text-decoration: none;
+
+  transition: 0.3s ease;
+  box-shadow: 0 6px 20px rgba(255, 100, 30, 0.4);
+}
+
+.btn-full:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(255, 120, 50, 0.6);
+}
+
+.btn-full:active {
+  transform: scale(0.96);
+}
+/* ================================
+   CONTACT PAGE – PREMIUM ESPORTS UI
+   ================================ */
+
+.contact-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 90px 16px 24px;
+  color: var(--text-main, #f9fafb);
+}
+
+/* Top hero */
+.contact-hero {
+  width: 100%;
+  max-width: 960px;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.contact-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 123, 41, 0.55);
+  box-shadow: 0 0 18px rgba(255, 123, 41, 0.55);
+  margin-bottom: 8px;
+}
+
+.contact-hero-title {
+  font-size: 1.8rem;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.contact-hero-sub {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+/* Layout: stack on mobile, 2 columns on desktop */
+.contact-layout {
+  width: 100%;
+  max-width: 960px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+@media (min-width: 768px) {
+  .contact-layout {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+/* Main support card */
+.contact-main-card {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 20px;
+  border-radius: 22px;
+  background: radial-gradient(
+      circle at top left,
+      rgba(255, 123, 41, 0.18),
+      transparent 55%
+    ),
+    rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.85),
+    0 0 28px rgba(255, 123, 41, 0.24);
+}
+
+.contact-main-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+      circle at 10% 0%,
+      rgba(255, 123, 41, 0.45),
+      transparent 55%
+    );
+  opacity: 0.55;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.contact-main-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.contact-title {
+  font-size: 1.3rem;
+  margin: 0 0 6px;
+}
+
+.contact-desc {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+/* Primary chips */
+.contact-primary-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.contact-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.22s ease;
+}
+
+.contact-chip-whatsapp {
+  background: radial-gradient(
+    circle at left,
+    rgba(34, 197, 94, 0.3),
+    rgba(15, 23, 42, 0.95)
+  );
+}
+
+.contact-chip:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.7);
+}
+
+.contact-chip-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem;
+}
+
+.contact-chip-whatsapp .contact-chip-icon {
+  background: #22c55e;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.9);
+  color: #041007;
+}
+
+.contact-chip-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.chip-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.8;
+  color: white;
+}
+
+.chip-value {
+  font-size: 0.85rem;
+  color: white;
+}
+
+/* Note row */
+.contact-note {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot-live {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+}
+
+/* Social card */
+.contact-social-card {
+  padding: 20px 18px 18px;
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9);
+}
+
+.contact-social-title {
+  font-size: 1.1rem;
+  margin: 0 0 4px;
+}
+
+.contact-social-sub {
+  margin: 0 0 14px;
+  font-size: 0.86rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+/* Social grid */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+@media (min-width: 480px) {
+  .contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Social item */
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 11px;
+  border-radius: 14px;
+
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.contact-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(248, 250, 252, 0.9);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.8);
+}
+
+.contact-icon-wrap {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15, 23, 42, 0.98);
+}
+
+.contact-icon {
+  font-size: 1.2rem;
+  color: #9bbcff;
+}
+
+.contact-icon-wrap.insta .contact-icon {
+  color: #ff66b3;
+}
+
+.contact-icon-wrap.fb .contact-icon {
+  color: #60a5fa;
+}
+
+.contact-icon-wrap.yt .contact-icon {
+  color: #ff4b4b;
+}
+
+.contact-item-text h4 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.contact-item-text p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+/* Big WhatsApp button */
+.contact-whatsapp-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  color: #042308;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.7);
+  cursor: pointer;
+  transition: 0.22s ease;
+}
+
+.contact-whatsapp-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 44px rgba(34, 197, 94, 0.9);
+}
+
+.wa-btn-icon {
+  font-size: 1.1rem;
+}
+
+/* Ensure no unwanted underlines */
+.contact-page a {
+  text-decoration: none;
+}
+/* FIX TOP SPACING FOR MOBILE */
+.contact-page-wrapper {
+  margin-top: 20px !important;   /* pushes card down slightly */
+}
+
+.contact-card {
+  margin-top: 15px !important;   /* ensures perfect vertical spacing */
+}
+
+/* Fix when used inside BackgroundVideo wrapper */
+.main-content.page {
+  padding-top: 67px !important; /* previously too tight, now perfect */
+}
