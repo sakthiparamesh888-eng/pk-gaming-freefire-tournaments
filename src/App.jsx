@@ -25,6 +25,10 @@ const PaymentPendingPage = React.lazy(() =>
 const BookingSummaryPage = React.lazy(() =>
   import("./pages/BookingSummaryPage.jsx")
 );
+// Add this with other lazy imports
+const RulesPage = React.lazy(() => import("./pages/Rules.jsx"));
+
+
 
 function AppLayout() {
   return (
@@ -54,6 +58,7 @@ export default function App() {
           <Route path="/verify-access" element={<AccessCheckPage />} />
           <Route path="/room-details" element={<RoomDetailsPage />} />
           <Route path="/my-bookings" element={<BookingSummaryPage />} />
+          <Route path="/rules" element={<RulesPage />} />
 
 
 

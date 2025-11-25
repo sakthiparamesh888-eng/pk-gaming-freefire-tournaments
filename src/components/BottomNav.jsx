@@ -1,12 +1,19 @@
 // src/components/BottomNav.jsx
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { FaHome, FaGamepad, FaUserAlt, FaPhone, FaListAlt } from "react-icons/fa";
+import { 
+  FaHome, 
+  FaGamepad, 
+  FaUserAlt, 
+  FaPhone, 
+  FaListAlt,
+  FaInfoCircle
+} from "react-icons/fa";
 import { getLocalUser } from "../services/sheetsApi.js";
 import "../styles/bottomnav.css";
 
 export default function BottomNav() {
-  const user = getLocalUser(); // 🔥 check login
+  const user = getLocalUser();
 
   const getClass = ({ isActive }) =>
     isActive ? "b-item active" : "b-item";
@@ -25,10 +32,9 @@ export default function BottomNav() {
         <div className="b-icon">
           <FaGamepad />
         </div>
-        <span className="b-label">Play</span>
+        <span className="b-label">Join Match</span>
       </NavLink>
 
-      {/* 🔥 If user logged in → Show MY BOOKINGS */}
       {user ? (
         <NavLink to="/my-bookings" className={getClass}>
           <div className="b-icon">
@@ -41,15 +47,23 @@ export default function BottomNav() {
           <div className="b-icon">
             <FaUserAlt />
           </div>
-          <span className="b-label">Account</span>
+          <span className="b-label">Profile</span>
         </NavLink>
       )}
+
+      {/* ✅ Single Rules & Info Button */}
+      <NavLink to="/rules" className={getClass}>
+        <div className="b-icon">
+          <FaInfoCircle />
+        </div>
+        <span className="b-label">Rules & Info</span>
+      </NavLink>
 
       <NavLink to="/contact" className={getClass}>
         <div className="b-icon">
           <FaPhone />
         </div>
-        <span className="b-label">Contact</span>
+        <span className="b-label">Support</span>
       </NavLink>
 
     </nav>
