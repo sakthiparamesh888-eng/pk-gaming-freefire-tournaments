@@ -14,6 +14,23 @@ export default function TournamentsPage() {
   const [csTypeFilter, setCsTypeFilter] = useState("ALL");
   const [searchText, setSearchText] = useState("");
 
+  // -------------------------------
+  // Popup for first-time visitors
+  // -------------------------------
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const visited = localStorage.getItem("visited_tournaments_page");
+
+    if (!visited) {
+      setShowPopup(true);
+      localStorage.setItem("visited_tournaments_page", "yes");
+    }
+  }, []);
+
+  // -------------------------------
+  // Fetch tournaments
+  // -------------------------------
   useEffect(() => {
     async function load() {
       try {
@@ -29,11 +46,12 @@ export default function TournamentsPage() {
     load();
   }, []);
 
+  // -------------------------------
+  // Filtering
+  // -------------------------------
   const filtered = tournaments.filter((t) => {
-    // Mode filter
     if (modeFilter !== "ALL" && t.mode !== modeFilter) return false;
 
-    // CS submode filter
     if (
       modeFilter === "CS" &&
       csTypeFilter !== "ALL" &&
@@ -42,7 +60,6 @@ export default function TournamentsPage() {
       return false;
     }
 
-    // Search filter (id or title)
     if (
       searchText &&
       !(
@@ -58,6 +75,28 @@ export default function TournamentsPage() {
 
   return (
     <div className="page page-tournaments">
+
+      {/* ---------------- POPUP ---------------- */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-box glass-card">
+            <h2>Only Squad Entry Allowed</h2>
+            <p>
+              This tournament accepts only full squad registrations.
+            </p>
+
+            <button
+              className="btn-primary"
+              style={{ marginTop: "15px" }}
+              onClick={() => setShowPopup(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+      {/* ---------------------------------------- */}
+
       <h1 className="page-title"></h1>
       <p className="page-subtitle"></p>
 
@@ -80,7 +119,6 @@ export default function TournamentsPage() {
           </p>
         )}
 
-        {/* MAIN LOOP */}
         {filtered.map((t) => (
           <TournamentCard key={t.id} tournament={t} />
         ))}

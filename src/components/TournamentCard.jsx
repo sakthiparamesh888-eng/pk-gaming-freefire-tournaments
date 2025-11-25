@@ -195,7 +195,7 @@ export default function TournamentCard({ tournament }) {
           </div>
 
           <div>
-            <span className="t-label">Slots</span>
+            <span className="t-label">ONLY SQUAD ENTRY</span>
             <span className="t-value">
               {safeCurrentPlayers}/{safeMaxPlayers}
             </span>
