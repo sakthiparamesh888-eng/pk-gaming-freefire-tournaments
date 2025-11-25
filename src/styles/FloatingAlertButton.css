@@ -1,0 +1,53 @@
+.floating-alert-btn {
+  position: fixed;
+  top: 80%;          /* shows at the top */
+  right: 7px;        /* right side */
+  z-index: 9999999;   /* always on top */
+
+  background-color: #f97316; /* orange-500 */
+  color: white;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-alert-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+.floating-alert-btn {
+  box-shadow: 0 0 18px rgba(255, 115, 0, 0.8);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 115, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 115, 0, 1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 115, 0, 0.4);
+  }
+}
+.floating-alert-btn {
+  animation: bob 2.5s infinite ease-in-out;
+}
+
+@keyframes bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
