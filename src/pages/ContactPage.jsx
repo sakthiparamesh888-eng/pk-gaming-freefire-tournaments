@@ -55,7 +55,7 @@ export default function ContactPage() {
                 </span>
                 <span className="contact-chip-text">
                   <span className="chip-label">Email Support</span>
-                  <span className="chip-value">pkgaming@gmail.com</span>
+                  <span className="chip-value">pkgamingtamil9940@gmail.com</span>
                 </span>
               </a>
 
@@ -95,7 +95,7 @@ export default function ContactPage() {
           <div className="contact-grid">
             {/* INSTAGRAM */}
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/pk_gaming_tamil_official/?igsh=eDB5OXI0cnZxZXF0&utm_source=qr#"
               target="_blank"
               rel="noreferrer"
               className="contact-item"
