@@ -11,7 +11,7 @@ export default function HomePage() {
     description: "48-player competitive BR scrims with anti-cheat security.",
     ctaText: "View BR Tournaments",
     ctaLink: "/tournaments",
-    meta: { entry: 29, prize: 499, size: 48 },
+    meta: { entry: 45, prize: 500, size: 48 },
   },
   {
     tag: "BR SCRIMS",
@@ -19,7 +19,7 @@ export default function HomePage() {
     description: "Sweaty lobbies for competitive squads. Improve team synergy.",
     ctaText: "Join Scrims",
     ctaLink: "/tournaments",
-    meta: { entry: 40, prize: 799, size: 48 },
+    meta: { entry: 55, prize: 500, size: 48 },
   },
   {
     tag: "WEEKEND SPECIAL",
@@ -27,7 +27,7 @@ export default function HomePage() {
     description: "Limited lobbies, triple prize pool, top-tier competitive rooms.",
     ctaText: "Check Schedule",
     ctaLink: "/tournaments",
-    meta: { entry: 79, prize: 1999, size: 48 },
+    meta: { entry: 50, prize: 500, size: 48 },
   },
   {
     tag: "CLAN WARS",
@@ -35,7 +35,7 @@ export default function HomePage() {
     description: "BR squad wars — represent your clan and dominate the lobby.",
     ctaText: "Register Clan",
     ctaLink: "/tournaments",
-    meta: { entry: 60, prize: 1499, size: 48 },
+    meta: { entry: 75, prize: 550, size: 48 },
   },
   {
     tag: "BR FAIR PLAY",
@@ -43,7 +43,7 @@ export default function HomePage() {
     description: "No emulators, no hacks — pure mobile competitive BR action.",
     ctaText: "View Rules",
     ctaLink: "/about",
-    meta: { entry: 30, prize: 500, size: 48 },
+    meta: { entry: 80, prize: 600, size: 48 },
   },
 ];
 
@@ -55,7 +55,7 @@ export default function HomePage() {
       description: "Prove your aim. Pure 1v1, no excuses.",
       ctaText: "View CS Tournaments",
       ctaLink: "/tournaments",
-      meta: { entry: 19, prize: 299, size: 2 },
+      meta: { entry:80, prize: 100, size: 2 },
     },
     {
       tag: "CS 2V2",
@@ -63,7 +63,7 @@ export default function HomePage() {
       description: "Perfect for best friends and duo mains.",
       ctaText: "Book a Slot",
       ctaLink: "/tournaments",
-      meta: { entry: 29, prize: 499, size: 4 },
+      meta:  { entry:80, prize: 100, size: 2 },
     },
     {
       tag: "CS 3V3",
@@ -71,7 +71,7 @@ export default function HomePage() {
       description: "Coordination and callouts win these lobbies.",
       ctaText: "Check CS Slots",
       ctaLink: "/tournaments",
-      meta: { entry: 39, prize: 799, size: 6 },
+      meta:  { entry:80, prize: 100, size: 2 },
     },
     {
       tag: "CS 4V4",
@@ -79,15 +79,15 @@ export default function HomePage() {
       description: "Classic esports style 4v4 battles.",
       ctaText: "See Prize Pool",
       ctaLink: "/tournaments",
-      meta: { entry: 49, prize: 1299, size: 8 },
+      meta: { entry:80, prize: 100, size: 2 },
     },
     {
-      tag: "RANKED CS",
+      tag: "CS GRAND CLASH",
       title: "Ranked Clash Squad Rooms",
       description: "Sweaty ranked feel with custom rules.",
       ctaText: "Join Ranked CS",
       ctaLink: "/tournaments",
-      meta: { entry: 29, prize: 599, size: 8 },
+      meta:  { entry:80, prize: 100, size: 2 },
     },
   ];
 
